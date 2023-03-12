@@ -12,12 +12,13 @@ export const ErrorPage = () => {
           <Link
             className="p-3 border-2 border-black rounded-md hover:bg-error-content hover:text-white"
             to=".."
+            relative="path"
           >
             Volver
           </Link>
         </div>
         <p className="m-3">Status: {error.status}</p>
-        <p className="m-3">{error.data}</p>
+        <p className="m-3">{error.data.message ?? error.data}</p>
       </div>
     </div>
   );

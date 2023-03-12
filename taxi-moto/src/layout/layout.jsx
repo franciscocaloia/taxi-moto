@@ -1,19 +1,23 @@
 import React, { useEffect } from "react";
-import { Outlet, useLoaderData, useRouteLoaderData } from "react-router-dom";
+import { Outlet, useLoaderData } from "react-router-dom";
 import { Footer } from "../components/footer/footer";
 import { Header } from "../components/header/header";
-import { useAuth } from "../store/useAuth";
+// import { useAuth } from "../store/useAuth";
+import { authActions } from "../store/authSlice";
+import { useDispatch } from "react-redux";
 
 export const Layout = () => {
   const user = useLoaderData();
-  const { setUser } = useAuth();
+  const dispatch = useDispatch();
   useEffect(() => {
-    setUser(user);
+    dispatch(authActions.login(user));
   }, [user]);
   return (
     <div className="h-screen flex flex-col">
       <Header />
-      <Outlet />
+      <div className="flex-1">
+        <Outlet />
+      </div>
       <Footer />
     </div>
   );

@@ -23,7 +23,7 @@ export const Nav = ({ categories }) => {
   return (
     <ul className="flex h-full items-center gap-4">
       {categories.map((category) => (
-        <NavItem category={category} />
+        <NavItem key={category.content} category={category} />
       ))}
       <li className="h-24 flex items-center">
         <button

@@ -3,15 +3,17 @@ import { Layout } from "./layout/layout";
 import { CadetePage } from "./pages/cadete/cadetePage";
 import { CadetePedidosPage } from "./pages/cadete/cadetePedidosPage";
 import { ErrorPage } from "./pages/errorPage";
-import {
-  LoginPage,
-  action as loginAction,
-  loader as loginLoader,
-} from "./pages/loginPage";
+import { LoginPage, action as loginAction } from "./pages/loginPage";
 import { NegocioInformacionPage } from "./pages/negocio/negocioInformacionPage";
-import { NegocioNuevoPedidoPage } from "./pages/negocio/negocioNuevoPedidoPage";
+import {
+  NegocioNuevoPedidoPage,
+  action as nuevoPedidoAction,
+} from "./pages/negocio/negocioNuevoPedidoPage";
 import { NegocioPage } from "./pages/negocio/negocioPage";
-import { NegocioPedidosPage } from "./pages/negocio/negocioPedidosPage";
+import {
+  loader as negocioPedidosLoader,
+  NegocioPedidosPage,
+} from "./pages/negocio/negocioPedidosPage";
 import { AuthProvider } from "./store/useAuth";
 import { checkAuthLoader, logoutAction } from "./utils/auth.js";
 
@@ -27,15 +29,12 @@ function App() {
           index: true,
           element: <LoginPage />,
           action: loginAction,
-          // loader: loginLoader,
         },
         {
           path: "logout",
           action: logoutAction,
         },
         {
-          // id: "checkAuthLoader",
-          // loader: checkAuthLoader,
           shouldRevalidate: () => false,
           children: [
             {
@@ -46,15 +45,17 @@ function App() {
                   element: <NegocioPage />,
                 },
                 {
-                  path: "pedidos",
+                  path: "pedidos/:idNegocio",
                   element: <NegocioPedidosPage />,
+                  loader: negocioPedidosLoader,
                 },
                 {
                   path: "nuevopedido",
+                  action: nuevoPedidoAction,
                   element: <NegocioNuevoPedidoPage />,
                 },
                 {
-                  path: "info",
+                  path: "info/:idNegocio",
                   element: <NegocioInformacionPage />,
                 },
               ],

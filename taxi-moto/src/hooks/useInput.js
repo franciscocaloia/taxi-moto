@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 
-const useInput = (validateInput) => {
+const useInput = (validateInput = () => true) => {
   const [inputValue, setInputValue] = useState("");
   const [inputChanged, setInputChanged] = useState(false);
 

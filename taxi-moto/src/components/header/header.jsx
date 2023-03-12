@@ -1,10 +1,9 @@
-import React from "react";
-import { useRouteLoaderData } from "react-router-dom";
-import { useAuth } from "../../store/useAuth";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Nav } from "../nav/nav";
 import { Logo } from "./logo";
 
-function getCategories(type) {
+function getCategories(type, id) {
   switch (type) {
     case "cadete":
       return [
@@ -21,7 +20,7 @@ function getCategories(type) {
       return [
         {
           content: "Pedidos",
-          url: "/negocio/pedidos",
+          url: "/negocio/pedidos/" + id,
         },
         {
           content: "Nuevo Pedido",
@@ -38,8 +37,8 @@ function getCategories(type) {
 }
 
 export const Header = () => {
-  const { user } = useAuth();
-  const categories = getCategories(user?.type);
+  const user = useSelector((state) => state.auth);
+  const categories = getCategories(user?.type, user?._id);
   const url = user ? "/" + user.type : "/";
   return (
     <header className="w-screen bg-primary ">

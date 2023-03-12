@@ -52,5 +52,7 @@ export async function getUserByFilter(filter) {
 }
 
 export async function getUserById(id) {
-  return await usersContainer.getById(id);
+  const user = await usersContainer.getById(id);
+  delete user.password;
+  return user;
 }

@@ -1,7 +1,7 @@
 import express from "express";
-import jwt from "jsonwebtoken";
 import { getUserById } from "./controller/authController.js";
 import { authMiddleware, authRouter } from "./router/authRouter.js";
+import { ordersRouter } from "./router/ordersRouter.js";
 
 const app = express();
 app.use(express.json());
@@ -11,6 +11,9 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
   next();
 });
+app.options("/*", (_, res) => {
+  res.sendStatus(200);
+});
 
 app.use(authRouter);
 
@@ -19,6 +22,8 @@ app.use(authRouter);
 app.get("/user", authMiddleware, async (req, res) => {
   return res.json(await getUserById(req._id));
 });
+
+app.use("/orders", authMiddleware, ordersRouter);
 
 app.use((error, req, res, next) => {
   const status = error.status || 500;

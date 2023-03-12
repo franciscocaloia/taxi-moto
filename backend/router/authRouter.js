@@ -27,6 +27,7 @@ authRouter.post("/login", async (req, res, next) => {
     next(error);
   }
 });
+
 authRouter.post("/signin", async (req, res, next) => {
   const newUser = req.body;
   try {

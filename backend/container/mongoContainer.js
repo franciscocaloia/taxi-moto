@@ -13,12 +13,11 @@ export class MongoContainer {
   }
   async getByFilter(filter) {
     const object = await this.collection.findOne(filter);
-
     return object && { ...object, _id: object._id.toString() };
   }
 
   async getManyByFilter(filter) {
-    const array = await this.collection.find(filter);
+    const array = await this.collection.find(filter).toArray();
     return array;
   }
 
@@ -27,6 +26,13 @@ export class MongoContainer {
     const _id = result.insertedId.toString();
     const newObject = { ...object, _id };
     return newObject;
+  }
+
+  async delete(idObject) {
+    const result = await this.collection.deleteOne({
+      _id: new ObjectId(idObject),
+    });
+    return result;
   }
 
   async update(id, object) {
