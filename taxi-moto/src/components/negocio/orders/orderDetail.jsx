@@ -18,12 +18,12 @@ export const OrderDetail = ({ order }) => {
             <Routing route={order.route} />
           </Map>
         </div>
-        <div className="card-body lg:w-1/2">
+        <div className="card-body lg:w-1/2 p-6">
           <h2 className="card-title capitalize border-b-2 border-b-base-200">
             {order.direction}
           </h2>
           <div className="flex gap-3">
-            <table className="table table-compact w-full ">
+            <table className="table table-compact w-full">
               <tbody>
                 <tr>
                   <th>Precio</th>
@@ -52,7 +52,7 @@ export const OrderDetail = ({ order }) => {
           </h2>
           <CadeteCard cadete={order.cadete} />
           <div className="border-b-2 border-b-base-200"></div>
-          <OrderActions />
+          <OrderActions order={order} />
         </div>
       </div>
     </div>

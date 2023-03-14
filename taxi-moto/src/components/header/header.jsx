@@ -21,7 +21,7 @@ function getCategories(type, id) {
       return [
         {
           content: "Pedidos",
-          url: "/negocio/pedidos/" + id,
+          url: `/negocio/${id}/pedidos`,
         },
         {
           content: "Nuevo Pedido",
@@ -29,7 +29,7 @@ function getCategories(type, id) {
         },
         {
           content: "Información",
-          url: "/negocio/info/" + id,
+          url: `/negocio/${id}/info`,
         },
       ];
     default:

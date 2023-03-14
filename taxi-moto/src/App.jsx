@@ -4,6 +4,10 @@ import { CadetePage } from "./pages/cadete/cadetePage";
 import { CadetePedidosPage } from "./pages/cadete/cadetePedidosPage";
 import { ErrorPage } from "./pages/errorPage";
 import { LoginPage, action as loginAction } from "./pages/loginPage";
+import {
+  NegocioEditarPedidoPage,
+  action as editarPedidoAction,
+} from "./pages/negocio/negocioEditarPedidoPage";
 import { NegocioInformacionPage } from "./pages/negocio/negocioInformacionPage";
 import {
   NegocioNuevoPedidoPage,
@@ -54,16 +58,21 @@ function App() {
                   element: <NegocioNuevoPedidoPage />,
                 },
                 {
-                  path: "info/:idNegocio",
+                  path: "editarpedido/:idPedido",
+                  action: editarPedidoAction,
+                  element: <NegocioEditarPedidoPage />,
+                },
+                {
+                  path: ":idNegocio/info",
                   element: <NegocioInformacionPage />,
                 },
                 {
-                  path: "pedidos/:idNegocio",
+                  path: ":idNegocio/pedidos",
                   element: <NegocioPedidosPage />,
                   loader: negocioPedidosLoader,
                 },
                 {
-                  path: "pedidos/:idNegocio/:idPedido",
+                  path: ":idNegocio/pedidos/:idPedido",
                   element: <NegocioPedidosDetailPage />,
                   loader: NegocioPedidosDetailLoader,
                 },

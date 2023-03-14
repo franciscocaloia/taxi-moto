@@ -4,6 +4,7 @@ import {
   getOrdersById,
   getOrdersByIdUser,
   postOrder,
+  putOrder,
 } from "../controller/ordersController.js";
 import { NotAuthError } from "../util/error.js";
 
@@ -56,7 +57,6 @@ ordersRouter.get("/prices", (req, res, next) => {
 
 ordersRouter.post("/", async (req, res, next) => {
   try {
-    console.log(req.body);
     const data = await postOrder(req.body);
     return res.json(data);
   } catch (error) {
@@ -85,9 +85,18 @@ ordersRouter.get("/:idPedido", async (req, res, next) => {
     next(error);
   }
 });
+ordersRouter.put("/:idPedido", async (req, res, next) => {
+  console.log("object");
+  try {
+    const data = await putOrder(req.params.idPedido, req.body);
+    return res.json(data);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+});
 
 ordersRouter.delete("/:idOrder", async (req, res, next) => {
-  console.log("ahre");
   try {
     const data = await deleteOrder(req.params.idOrder);
     return res.json(data);

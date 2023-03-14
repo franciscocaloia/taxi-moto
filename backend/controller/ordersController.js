@@ -22,3 +22,8 @@ export async function postOrder(order) {
 export async function deleteOrder(idOrder) {
   return await ordersContainer.delete(idOrder);
 }
+
+export async function putOrder(idOrder, order) {
+  delete order._id;
+  return await ordersContainer.update(idOrder, order);
+}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, useActionData } from "react-router-dom";
+import { Form, Link, useActionData } from "react-router-dom";
 import useInput from "../../hooks/useInput";
 import { isValidText } from "../../utils/validation";
 import { MapInputForm } from "./mapInputForm";
@@ -8,10 +8,15 @@ import { ResultsList } from "./resultsList";
 import logoSearch from "../../assets/logoSearch.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { mapInputActions } from "../../store/mapInputSlice";
-export const NewPedidoForm = () => {
+export const PedidoForm = ({ order }) => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const error = useActionData();
+  useEffect(() => {
+    if (order) {
+      dispatch(mapInputActions.setMapCoords(order.route.to));
+    }
+  }, []);
   const [directionResults, setDirectionResults] = useState();
   const {
     inputValue: directionValue,
@@ -19,28 +24,28 @@ export const NewPedidoForm = () => {
     inputError: directionError,
     inputChangeHandler: directionChangeHandler,
     inputBlurHandler: directionBlurHandler,
-  } = useInput(isValidText); //direccion
+  } = useInput(isValidText, order?.direction); //direccion
   const {
     inputValue: phoneValue,
     inputValid: phoneValid,
     inputError: phoneError,
     inputChangeHandler: phoneChangeHandler,
     inputBlurHandler: phoneBlurHandler,
-  } = useInput(isValidText); //telefono
+  } = useInput(isValidText, order?.phone); //telefono
   const {
     inputValue: amountValue,
     inputValid: amountValid,
     inputError: amountError,
     inputChangeHandler: amountChangeHandler,
     inputBlurHandler: amountBlurHandler,
-  } = useInput(isValidText); //Monto
+  } = useInput(isValidText, order?.totalAmount.amount); //Monto
   const {
     inputValue: dateValue,
     inputValid: dateValid,
     inputError: dateError,
     inputChangeHandler: dateChangeHandler,
     inputBlurHandler: dateBlurHandler,
-  } = useInput(); //horario
+  } = useInput(() => true, order?.date); //horario
   async function geoCodeHandler(event) {
     event.preventDefault();
     const results = await NominatimJS.search({
@@ -63,6 +68,11 @@ export const NewPedidoForm = () => {
         method="post"
         className="w-full mt-0 p-6 bg-base-100 lg:p-0 grid grid-cols-1 lg:grid-cols-2"
       >
+        <input
+          name="order"
+          type="hidden"
+          value={JSON.stringify(order) ?? ""}
+        ></input>
         <input
           name="state"
           type="hidden"
@@ -176,12 +186,22 @@ export const NewPedidoForm = () => {
             </smal>
           )}
         </div>
-        <div className="form-control items-center py-3 lg:p-6 col-start-1">
+        <div className="form-control flex-row gap-2 items-center py-3 col-start-1 lg:p-6 ">
+          {order && (
+            <Link
+              className="btn btn-primary hover:btn-primary-focus w-1/2"
+              to=".."
+            >
+              Cancelar
+            </Link>
+          )}
           <button
             disabled={!(directionValid && phoneValid && amountValid)}
-            className="btn btn-primary hover:btn-primary-focus w-full"
+            className={`btn btn-primary hover:btn-primary-focus ${
+              order ? "w-1/2" : "w-full"
+            }`}
           >
-            Ingresar
+            Confirmar pedido
           </button>
         </div>
       </Form>

@@ -10,7 +10,7 @@ export const OrdersListItem = ({ order }) => {
     <li className="my-3 lg:m-6">
       <Link
         className="card bg-base-100 shadow-xl transition-all duration-200 hover:scale-105"
-        to={`/negocio/pedidos/${order.negocio}/${order._id}`}
+        to={`/negocio/${order.negocio}/pedidos/${order._id}`}
       >
         <div className="card-body flex-row">
           <div className="flex flex-col w-5/6">

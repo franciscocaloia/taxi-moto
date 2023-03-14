@@ -28,7 +28,6 @@ export default function Routing() {
     routingControl.hide();
     routingControl.on("routesfound", (event) => {
       const { lat, lng } = event.routes[0].waypoints[1].latLng;
-      console.log(lat, lng);
       const route = {
         from: location,
         to: [lat, lng],

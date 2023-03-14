@@ -1,13 +1,13 @@
 import React from "react";
 import { json, redirect } from "react-router-dom";
-import { NewPedidoForm } from "../../components/negocio/newPedidoForm";
+import { PedidoForm } from "../../components/negocio/PedidoForm";
 import { getPricing } from "../../utils/pricing";
 
 export const NegocioNuevoPedidoPage = () => {
   return (
     <>
       <h2>Nuevo Pedido</h2>
-      <NewPedidoForm />
+      <PedidoForm />
     </>
   );
 };
@@ -18,6 +18,9 @@ export async function action({ request, params }) {
     auth: user,
     mapInput: { route },
   } = JSON.parse(data.get("state"));
+  if (!(route.to && route.from)) {
+    return json("Debe ingresar una ubicacion en el mapa");
+  }
   const direction = data.get("direction");
   const phone = data.get("phone");
   const amount = data.get("amount");
@@ -41,9 +44,6 @@ export async function action({ request, params }) {
     },
     route,
   };
-  if (!(route.to && route.from)) {
-    return json("Debe ingresar una ubicacion en el mapa");
-  }
 
   const token = localStorage.getItem("token");
   if (token) {

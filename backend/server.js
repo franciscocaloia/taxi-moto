@@ -5,25 +5,31 @@ import { ordersRouter } from "./router/ordersRouter.js";
 
 const app = express();
 app.use(express.json());
+
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PATCH,DELETE");
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PATCH,DELETE,PUT");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
   next();
 });
 app.options("/*", (_, res) => {
   res.sendStatus(200);
 });
-
 app.use(authRouter);
-
-// app.use(authMiddleware);
 
 app.get("/user", authMiddleware, async (req, res) => {
   return res.json(await getUserById(req.user._id));
 });
 
-app.use("/orders", authMiddleware, ordersRouter);
+app.use(
+  "/orders",
+  authMiddleware,
+  (req, res, next) => {
+    console.log("ahre");
+    next();
+  },
+  ordersRouter
+);
 
 app.use((error, req, res, next) => {
   const status = error.status || 500;
