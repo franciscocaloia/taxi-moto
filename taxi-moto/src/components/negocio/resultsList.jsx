@@ -11,7 +11,7 @@ export const ResultsList = ({ results, clearResults }) => {
             className="absolute top-0 left-0 h-screen w-screen bg-opacity-5 bg-black"
           />
           <div className="relative">
-            <ul className="menu absolute top-0 bg-[#e0dfdf]">
+            <ul className="menu absolute max-h-80  overflow-hidden top-0 bg-[#e0dfdf]">
               {results.map((result) => (
                 <ResultItem
                   key={result.place_id}

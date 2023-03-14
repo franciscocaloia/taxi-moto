@@ -1,5 +1,5 @@
 import React from "react";
-import { redirect } from "react-router-dom";
+import { json, redirect } from "react-router-dom";
 import { NewPedidoForm } from "../../components/negocio/newPedidoForm";
 import { getPricing } from "../../utils/pricing";
 
@@ -28,12 +28,23 @@ export async function action({ request, params }) {
     direction,
     phone,
     date,
-    state: "TOMADO",
+    state: {
+      REGISTRADO: true,
+      TOMADO: false,
+      RETIRADO: false,
+      ABONADO: false,
+      ENTREGADO: false,
+    },
     totalAmount: {
       amount,
       ...pricing,
     },
+    route,
   };
+  if (!(route.to && route.from)) {
+    return json("Debe ingresar una ubicacion en el mapa");
+  }
+
   const token = localStorage.getItem("token");
   if (token) {
     const response = await fetch("http://localhost:8080/orders", {

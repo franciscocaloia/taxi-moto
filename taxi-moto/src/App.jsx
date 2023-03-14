@@ -11,6 +11,10 @@ import {
 } from "./pages/negocio/negocioNuevoPedidoPage";
 import { NegocioPage } from "./pages/negocio/negocioPage";
 import {
+  loader as NegocioPedidosDetailLoader,
+  NegocioPedidosDetailPage,
+} from "./pages/negocio/negocioPedidosDetailPage";
+import {
   loader as negocioPedidosLoader,
   NegocioPedidosPage,
 } from "./pages/negocio/negocioPedidosPage";
@@ -45,11 +49,6 @@ function App() {
                   element: <NegocioPage />,
                 },
                 {
-                  path: "pedidos/:idNegocio",
-                  element: <NegocioPedidosPage />,
-                  loader: negocioPedidosLoader,
-                },
-                {
                   path: "nuevopedido",
                   action: nuevoPedidoAction,
                   element: <NegocioNuevoPedidoPage />,
@@ -57,6 +56,16 @@ function App() {
                 {
                   path: "info/:idNegocio",
                   element: <NegocioInformacionPage />,
+                },
+                {
+                  path: "pedidos/:idNegocio",
+                  element: <NegocioPedidosPage />,
+                  loader: negocioPedidosLoader,
+                },
+                {
+                  path: "pedidos/:idNegocio/:idPedido",
+                  element: <NegocioPedidosDetailPage />,
+                  loader: NegocioPedidosDetailLoader,
                 },
               ],
             },

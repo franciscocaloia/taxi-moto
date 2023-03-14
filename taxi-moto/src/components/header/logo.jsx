@@ -5,7 +5,7 @@ export const Logo = ({ url }) => {
   return (
     <Link to={url}>
       <img
-        className="h-24 p-6 "
+        className="h-24 py-6 lg:p-6"
         src="/assets/logoTIME-notext.png"
         alt="Logo Taxi Moto Esperanza"
       />

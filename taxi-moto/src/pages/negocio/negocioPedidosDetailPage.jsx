@@ -1,21 +1,17 @@
 import React from "react";
 import { useLoaderData } from "react-router-dom";
-import { OrdersList } from "../../components/negocio/orders/ordersList";
+import { OrderDetail } from "../../components/negocio/orders/orderDetail";
 
-export const NegocioPedidosPage = () => {
-  const orders = useLoaderData();
-  return (
-    <>
-      <OrdersList orders={orders} />
-    </>
-  );
+export const NegocioPedidosDetailPage = () => {
+  const order = useLoaderData();
+  return <OrderDetail order={order} />;
 };
 
 export async function loader({ params }) {
   const token = localStorage.getItem("token");
   if (token) {
     const response = await fetch(
-      "http://localhost:8080/orders/user/" + params.idNegocio,
+      `http://localhost:8080/orders/${params.idPedido}`,
       {
         headers: {
           Authorization: "Bearer " + token,

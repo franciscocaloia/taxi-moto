@@ -20,7 +20,7 @@ app.use(authRouter);
 // app.use(authMiddleware);
 
 app.get("/user", authMiddleware, async (req, res) => {
-  return res.json(await getUserById(req._id));
+  return res.json(await getUserById(req.user._id));
 });
 
 app.use("/orders", authMiddleware, ordersRouter);

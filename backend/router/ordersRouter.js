@@ -1,45 +1,13 @@
 import { Router } from "express";
 import {
   deleteOrder,
-  getOrdersByIdNegocio,
+  getOrdersById,
+  getOrdersByIdUser,
   postOrder,
 } from "../controller/ordersController.js";
 import { NotAuthError } from "../util/error.js";
 
 export const ordersRouter = Router();
-
-ordersRouter.get("/:idNegocio", async (req, res, next) => {
-  if (req._id === req.params.idNegocio) {
-    try {
-      const data = await getOrdersByIdNegocio(req.params.idNegocio);
-      return res.json(data);
-    } catch (error) {
-      next(error);
-    }
-  } else {
-    next(new NotAuthError("Acceso denegado"));
-  }
-});
-
-ordersRouter.post("/", async (req, res, next) => {
-  try {
-    console.log(req.body);
-    const data = await postOrder(req.body);
-    return res.json(data);
-  } catch (error) {
-    next(error);
-  }
-});
-
-ordersRouter.delete("/:idOrder", async (req, res, next) => {
-  console.log("ahre");
-  try {
-    const data = await deleteOrder(req.params.idOrder);
-    return res.json(data);
-  } catch (error) {
-    next(error);
-  }
-});
 
 ordersRouter.get("/prices", (req, res, next) => {
   return res.status(200).json({
@@ -83,9 +51,47 @@ ordersRouter.get("/prices", (req, res, next) => {
       shipment: 40,
       additional: 0,
     },
-    // 6500: {
-    //   shipment: 40,
-    //   additional: 0,
-    // },
   });
+});
+
+ordersRouter.post("/", async (req, res, next) => {
+  try {
+    console.log(req.body);
+    const data = await postOrder(req.body);
+    return res.json(data);
+  } catch (error) {
+    next(error);
+  }
+});
+
+ordersRouter.get("/user/:idNegocio", async (req, res, next) => {
+  if (req.user._id === req.params.idNegocio) {
+    try {
+      const data = await getOrdersByIdUser(req.user);
+      return res.json(data);
+    } catch (error) {
+      next(error);
+    }
+  } else {
+    next(new NotAuthError("Acceso denegado"));
+  }
+});
+
+ordersRouter.get("/:idPedido", async (req, res, next) => {
+  try {
+    const data = await getOrdersById(req.params.idPedido);
+    return res.json(data);
+  } catch (error) {
+    next(error);
+  }
+});
+
+ordersRouter.delete("/:idOrder", async (req, res, next) => {
+  console.log("ahre");
+  try {
+    const data = await deleteOrder(req.params.idOrder);
+    return res.json(data);
+  } catch (error) {
+    next(error);
+  }
 });

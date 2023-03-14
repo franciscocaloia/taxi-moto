@@ -11,7 +11,7 @@ export function authMiddleware(req, res, next) {
   const authToken = req.headers.authorization.split(" ")[1];
   try {
     const validatedToken = jwt.verify(authToken, SECRET);
-    req._id = validatedToken;
+    req.user = validatedToken;
   } catch (error) {
     return res.json({ error: "No auth token" });
   }
@@ -32,7 +32,6 @@ authRouter.post("/signin", async (req, res, next) => {
   const newUser = req.body;
   try {
     const token = await signupUser(newUser);
-    console.log(token);
     return res.json({ token });
   } catch (error) {
     next(error);

@@ -1,14 +1,17 @@
-import React, { useState } from "react";
-import { Form } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Form, useActionData } from "react-router-dom";
 import useInput from "../../hooks/useInput";
 import { isValidText } from "../../utils/validation";
 import { MapInputForm } from "./mapInputForm";
 import { NominatimJS } from "@owsas/nominatim-js";
 import { ResultsList } from "./resultsList";
 import logoSearch from "../../assets/logoSearch.svg";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { mapInputActions } from "../../store/mapInputSlice";
 export const NewPedidoForm = () => {
+  const dispatch = useDispatch();
   const state = useSelector((state) => state);
+  const error = useActionData();
   const [directionResults, setDirectionResults] = useState();
   const {
     inputValue: directionValue,
@@ -43,28 +46,29 @@ export const NewPedidoForm = () => {
     const results = await NominatimJS.search({
       q: directionValue,
       country: "Argentina",
-      limit: 6,
     });
     setDirectionResults(results);
   }
   async function clearResults() {
     setDirectionResults();
   }
-  function submitHandler(e) {}
-
+  function submitHandler(e) {
+    dispatch(mapInputActions.setMapCoords());
+    dispatch(mapInputActions.setRoute());
+  }
   return (
-    <div className="w-screen sm:w-2/3 mx-auto flex">
+    <div className="w-full  lg:w-4/5 p-6 mx-auto">
       <Form
-        // onSubmit={submitHandler}
+        onSubmit={submitHandler}
         method="post"
-        className="w-screen mt-0 sm:w-1/2 sm:mx-auto"
+        className="w-full mt-0 p-6 bg-base-100 lg:p-0 grid grid-cols-1 lg:grid-cols-2"
       >
         <input
           name="state"
           type="hidden"
           value={JSON.stringify(state) ?? ""}
         ></input>
-        <div className="form-control p-6">
+        <div className="form-control py-3 lg:p-6 col-start-1">
           <label className="font-monserrat" htmlFor="name">
             Dirección
           </label>
@@ -85,11 +89,7 @@ export const NewPedidoForm = () => {
               <img className="h-1/2" src={logoSearch} alt="logo search" />
             </button>
           </div>
-          <ResultsList
-            results={directionResults}
-            // onDirectionResultSelect={onDirectionResultSelect}
-            clearResults={clearResults}
-          />
+          <ResultsList results={directionResults} clearResults={clearResults} />
           {directionError && (
             <div className="relative">
               <p className="absolute text-error">
@@ -98,7 +98,7 @@ export const NewPedidoForm = () => {
             </div>
           )}
         </div>
-        <div className="form-control p-6">
+        <div className="form-control py-3 lg:p-6 col-start-1">
           <label className="font-monserrat" htmlFor="name">
             Telefono
           </label>
@@ -120,7 +120,7 @@ export const NewPedidoForm = () => {
             </div>
           )}
         </div>
-        <div className="form-control  p-6">
+        <div className="form-control  py-3 lg:p-6 col-start-1">
           <label className="font-monserrat" htmlFor="name">
             Total
           </label>
@@ -142,7 +142,7 @@ export const NewPedidoForm = () => {
             </div>
           )}
         </div>
-        <div className="form-control p-6">
+        <div className="form-control py-3 lg:p-6 col-start-1">
           <label className="font-monserrat" htmlFor="name">
             Hora de entrega (Dejar vacio si es entrega inmediata)
           </label>
@@ -164,15 +164,27 @@ export const NewPedidoForm = () => {
             </div>
           )}
         </div>
-        <div className="form-control items-center p-6">
-          <button className="btn btn-primary hover:btn-primary-focus w-full">
+        <div
+          className={`w-full relative h-80 my-6 lg:p-6 lg:m-0 lg:h-full row-start-2 lg:row-start-1 lg:row-span-5 lg:col-start-2 ${
+            error && "border border-error"
+          }`}
+        >
+          <MapInputForm />
+          {error && (
+            <smal className="absolute w-full text-base-100 bg-error top-full lg:bottom-0 lg:top-auto left-0 text-center">
+              {error}
+            </smal>
+          )}
+        </div>
+        <div className="form-control items-center py-3 lg:p-6 col-start-1">
+          <button
+            disabled={!(directionValid && phoneValid && amountValid)}
+            className="btn btn-primary hover:btn-primary-focus w-full"
+          >
             Ingresar
           </button>
         </div>
       </Form>
-      <div className="w-screen sm:w-1/2 py-6">
-        <MapInputForm />
-      </div>
     </div>
   );
 };

@@ -15,7 +15,7 @@ export const Layout = () => {
   return (
     <div className="h-screen flex flex-col">
       <Header />
-      <div className="flex-1">
+      <div className="bg-base-200 flex-1">
         <Outlet />
       </div>
       <Footer />
