@@ -6,8 +6,7 @@ const ordersContainer = new MongoContainer(ordersCollection);
 
 export async function getOrdersByIdUser(user) {
   const { type, _id } = user;
-  const query = {};
-  query[type] = _id;
+  const query = { [type]: _id };
   return await ordersContainer.getManyByFilter(query);
 }
 

@@ -10,11 +10,11 @@ function getCategories(type, id) {
       return [
         {
           content: "Pedidos",
-          url: "/cadetes/pedidos",
+          url: `/cadete/${id}/pedidos`,
         },
         {
           content: "Información",
-          url: "/cadetes/info",
+          url: `/cadete/${id}/info`,
         },
       ];
     case "negocio":

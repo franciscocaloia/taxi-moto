@@ -65,15 +65,11 @@ ordersRouter.post("/", async (req, res, next) => {
 });
 
 ordersRouter.get("/user/:idNegocio", async (req, res, next) => {
-  if (req.user._id === req.params.idNegocio) {
-    try {
-      const data = await getOrdersByIdUser(req.user);
-      return res.json(data);
-    } catch (error) {
-      next(error);
-    }
-  } else {
-    next(new NotAuthError("Acceso denegado"));
+  try {
+    const data = await getOrdersByIdUser(req.user);
+    return res.json(data);
+  } catch (error) {
+    next(error);
   }
 });
 

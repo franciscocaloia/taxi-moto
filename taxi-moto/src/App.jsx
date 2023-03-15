@@ -91,7 +91,11 @@ function App() {
                   element: <CadetePage />,
                 },
                 {
-                  path: "pedidos",
+                  path: ":idCadete/pedidos",
+                  element: <CadetePedidosPage />,
+                },
+                {
+                  path: ":idCadete/info",
                   element: <CadetePedidosPage />,
                 },
               ],
