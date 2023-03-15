@@ -43,7 +43,7 @@ export const Footer = () => {
           </a>
         </div>
       </footer>
-      <div className="bg-footer-background h-12 bg-contain "></div>
+      <div className="bg-footer-background h-12 bg-contain"></div>
     </>
   );
 };

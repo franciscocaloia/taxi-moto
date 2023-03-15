@@ -86,7 +86,6 @@ ordersRouter.get("/:idPedido", async (req, res, next) => {
   }
 });
 ordersRouter.put("/:idPedido", async (req, res, next) => {
-  console.log("object");
   try {
     const data = await putOrder(req.params.idPedido, req.body);
     return res.json(data);

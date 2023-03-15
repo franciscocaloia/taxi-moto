@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Link, useActionData } from "react-router-dom";
+import { Form, Link, useActionData, useNavigate } from "react-router-dom";
 import useInput from "../../hooks/useInput";
 import { isValidText } from "../../utils/validation";
 import { MapInputForm } from "./mapInputForm";
@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { mapInputActions } from "../../store/mapInputSlice";
 export const PedidoForm = ({ order }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const state = useSelector((state) => state);
   const error = useActionData();
   useEffect(() => {
@@ -78,7 +79,7 @@ export const PedidoForm = ({ order }) => {
           type="hidden"
           value={JSON.stringify(state) ?? ""}
         ></input>
-        <div className="form-control py-3 lg:p-6 col-start-1">
+        <div className="form-control my-3 lg:m-6 col-start-1">
           <label className="font-monserrat" htmlFor="name">
             Dirección
           </label>
@@ -108,7 +109,7 @@ export const PedidoForm = ({ order }) => {
             </div>
           )}
         </div>
-        <div className="form-control py-3 lg:p-6 col-start-1">
+        <div className="form-control my-3 lg:m-6 col-start-1">
           <label className="font-monserrat" htmlFor="name">
             Telefono
           </label>
@@ -130,7 +131,7 @@ export const PedidoForm = ({ order }) => {
             </div>
           )}
         </div>
-        <div className="form-control  py-3 lg:p-6 col-start-1">
+        <div className="form-control my-3 lg:m-6 col-start-1">
           <label className="font-monserrat" htmlFor="name">
             Total
           </label>
@@ -152,7 +153,7 @@ export const PedidoForm = ({ order }) => {
             </div>
           )}
         </div>
-        <div className="form-control py-3 lg:p-6 col-start-1">
+        <div className="form-control my-3 lg:m-6 col-start-1">
           <label className="font-monserrat" htmlFor="name">
             Hora de entrega (Dejar vacio si es entrega inmediata)
           </label>
@@ -186,14 +187,14 @@ export const PedidoForm = ({ order }) => {
             </smal>
           )}
         </div>
-        <div className="form-control flex-row gap-2 items-center py-3 col-start-1 lg:p-6 ">
+        <div className="form-control flex-row gap-2 items-center my-3 col-start-1 lg:m-6 ">
           {order && (
-            <Link
+            <button
               className="btn btn-primary hover:btn-primary-focus w-1/2"
-              to=".."
+              onClick={()=>navigate(-1)}
             >
               Cancelar
-            </Link>
+            </button>
           )}
           <button
             disabled={!(directionValid && phoneValid && amountValid)}

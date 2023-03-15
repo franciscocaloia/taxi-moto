@@ -28,6 +28,7 @@ export async function action({ request, params }) {
   const pricing = await getPricing(route.totalDistance);
   const order = {
     negocio: user._id,
+    name:user.name,
     direction,
     phone,
     date,
