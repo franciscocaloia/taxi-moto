@@ -5,7 +5,8 @@ export class MongoContainer {
     this.collection = collection;
   }
   async getAll() {
-    return await this.collection.find({}).toArray();
+    const array = await this.collection.find({}).toArray()
+    return array.map(element=>({...element,_id:element._id.toString()}));
   }
   async getById(id) {
     const object = await this.collection.findOne({ _id: new ObjectId(id) });

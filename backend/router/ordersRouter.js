@@ -2,11 +2,11 @@ import { Router } from "express";
 import {
   deleteOrder,
   getOrdersById,
-  getOrdersByIdUser,
+  getOrdersByIdCadete,
+  getOrdersByIdNegocio,
   postOrder,
   putOrder,
 } from "../controller/ordersController.js";
-import { NotAuthError } from "../util/error.js";
 
 export const ordersRouter = Router();
 
@@ -55,6 +55,16 @@ ordersRouter.get("/prices", (req, res, next) => {
   });
 });
 
+
+
+// ordersRouter.get("/", async (req, res, next) => {
+//   try {
+//     const data = await getOrders(req.body);
+//     return res.json(data);
+//   } catch (error) {
+//     next(error);
+//   }
+// });
 ordersRouter.post("/", async (req, res, next) => {
   try {
     const data = await postOrder(req.body);
@@ -64,9 +74,19 @@ ordersRouter.post("/", async (req, res, next) => {
   }
 });
 
-ordersRouter.get("/user/:idNegocio", async (req, res, next) => {
+
+ordersRouter.get("/negocio", async (req, res, next) => {
   try {
-    const data = await getOrdersByIdUser(req.user);
+    const data = await getOrdersByIdNegocio(req.user);
+    return res.json(data);
+  } catch (error) {
+    next(error);
+  }
+});
+
+ordersRouter.get("/cadete", async (req, res, next) => {
+  try {
+    const data = await getOrdersByIdCadete(req.user);
     return res.json(data);
   } catch (error) {
     next(error);
@@ -81,6 +101,7 @@ ordersRouter.get("/:idPedido", async (req, res, next) => {
     next(error);
   }
 });
+
 ordersRouter.put("/:idPedido", async (req, res, next) => {
   try {
     const data = await putOrder(req.params.idPedido, req.body);

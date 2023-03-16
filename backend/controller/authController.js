@@ -16,7 +16,7 @@ export async function loginUser(username, password) {
   const user = await usersContainer.getByFilter({ username });
   if (user) {
     if (bcrypt.compareSync(password, user.password)) {
-      const token = jwt.sign({ _id: user._id, type: user.type }, SECRET);
+      const token = jwt.sign({ _id: user._id}, SECRET);
       const type = user.type;
       return { token, type };
     } else {

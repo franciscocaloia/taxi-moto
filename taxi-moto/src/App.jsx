@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Layout } from "./layout/layout";
 import { CadetePage } from "./pages/cadete/cadetePage";
-import { CadetePedidosPage } from "./pages/cadete/cadetePedidosPage";
+import { CadetePedidosPage,loader as cadetePedidosLoader } from "./pages/cadete/cadetePedidosPage";
 import { ErrorPage } from "./pages/errorPage";
 import { LoginPage, action as loginAction } from "./pages/loginPage";
 import {
@@ -92,6 +92,7 @@ function App() {
                 },
                 {
                   path: ":idCadete/pedidos",
+                  loader:cadetePedidosLoader,
                   element: <CadetePedidosPage />,
                 },
                 {

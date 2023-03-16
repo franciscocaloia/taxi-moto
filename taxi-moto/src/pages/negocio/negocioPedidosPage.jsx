@@ -15,7 +15,7 @@ export async function loader({ params }) {
   const token = localStorage.getItem("token");
   if (token) {
     const response = await fetch(
-      "http://localhost:8080/orders/user/" + params.idNegocio,
+      "http://localhost:8080/orders/negocio",
       {
         headers: {
           Authorization: "Bearer " + token,

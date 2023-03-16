@@ -24,10 +24,6 @@ app.get("/user", authMiddleware, async (req, res) => {
 app.use(
   "/orders",
   authMiddleware,
-  (req, res, next) => {
-    console.log("ahre");
-    next();
-  },
   ordersRouter
 );
 
