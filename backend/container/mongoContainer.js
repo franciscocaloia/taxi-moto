@@ -5,8 +5,11 @@ export class MongoContainer {
     this.collection = collection;
   }
   async getAll() {
-    const array = await this.collection.find({}).toArray()
-    return array.map(element=>({...element,_id:element._id.toString()}));
+    const array = await this.collection.find({}).toArray();
+    return array.map((element) => ({
+      ...element,
+      _id: element._id.toString(),
+    }));
   }
   async getById(id) {
     const object = await this.collection.findOne({ _id: new ObjectId(id) });
@@ -19,7 +22,10 @@ export class MongoContainer {
 
   async getManyByFilter(filter) {
     const array = await this.collection.find(filter).toArray();
-    return array;
+    return array.map((element) => ({
+      ...element,
+      _id: element._id.toString(),
+    }));
   }
 
   async save(object) {

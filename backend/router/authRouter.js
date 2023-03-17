@@ -1,7 +1,11 @@
 import { Router } from "express";
 import jwt from "jsonwebtoken";
 import { SECRET } from "../cfg/cfg.js";
-import { loginUser, signupUser } from "../controller/authController.js";
+import {
+  loginUser,
+  signupUser,
+  signupUserArray,
+} from "../controller/authController.js";
 export const authRouter = Router();
 
 export function authMiddleware(req, res, next) {
@@ -33,6 +37,16 @@ authRouter.post("/signin", async (req, res, next) => {
   try {
     const token = await signupUser(newUser);
     return res.json({ token });
+  } catch (error) {
+    next(error);
+  }
+});
+
+authRouter.post("/signupArray", async (req, res, next) => {
+  const array = req.body;
+  try {
+    await signupUserArray(array);
+    return res.sendStatus(200);
   } catch (error) {
     next(error);
   }

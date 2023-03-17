@@ -16,7 +16,7 @@ export async function loginUser(username, password) {
   const user = await usersContainer.getByFilter({ username });
   if (user) {
     if (bcrypt.compareSync(password, user.password)) {
-      const token = jwt.sign({ _id: user._id}, SECRET);
+      const token = jwt.sign({ _id: user._id }, SECRET);
       const type = user.type;
       return { token, type };
     } else {
@@ -25,6 +25,20 @@ export async function loginUser(username, password) {
   } else {
     throw new NotFoundError("Usuario inexistente");
   }
+}
+
+export async function signupUserArray(array) {
+  array.forEach(async (newUser) => {
+    console.log(newUser);
+    const { username, password } = newUser;
+    const existingUser = await usersContainer.getByFilter({ username });
+    if (existingUser) {
+      throw new UnprocessableError("Usuario existente");
+    } else {
+      const hash = bcrypt.hashSync(password, 8);
+      await usersContainer.save({ ...newUser, password: hash });
+    }
+  });
 }
 
 export async function signupUser(newUser) {
@@ -41,6 +55,10 @@ export async function signupUser(newUser) {
 
 export async function getUsers() {
   return await usersContainer.getAll();
+}
+
+export async function getNegocios() {
+  return await usersContainer.getManyByFilter({ type: "negocio" });
 }
 
 export async function postUser(user) {

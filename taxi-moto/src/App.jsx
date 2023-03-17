@@ -1,7 +1,14 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Layout } from "./layout/layout";
 import { CadetePage } from "./pages/cadete/cadetePage";
-import { CadetePedidosPage,loader as cadetePedidosLoader } from "./pages/cadete/cadetePedidosPage";
+import {
+  CadeteNegociosPage,
+  loader as cadeteNegociosLoader,
+} from "./pages/cadete/cadeteNegociosPage";
+import {
+  CadetePedidosPage,
+  loader as cadetePedidosLoader,
+} from "./pages/cadete/cadetePedidosPage";
 import { ErrorPage } from "./pages/errorPage";
 import { LoginPage, action as loginAction } from "./pages/loginPage";
 import {
@@ -25,6 +32,9 @@ import {
 } from "./pages/negocio/negocioPedidosPage";
 import { AuthProvider } from "./store/useAuth";
 import { checkAuthLoader, logoutAction } from "./utils/auth.js";
+import { CadeteInfoPage } from "./pages/cadete/cadeteInfoPage";
+import { CadeteNegociosPedidosPage } from "./pages/cadete/cadeteNegociosPedidosPage";
+import { CadeteNegociosPedidosDetailPage } from "./pages/cadete/cadeteNegociosPedidosDetailPage";
 
 function App() {
   const router = createBrowserRouter([
@@ -92,12 +102,25 @@ function App() {
                 },
                 {
                   path: ":idCadete/pedidos",
-                  loader:cadetePedidosLoader,
+                  loader: cadetePedidosLoader,
                   element: <CadetePedidosPage />,
                 },
                 {
+                  path: ":idCadete/negocios",
+                  loader: cadeteNegociosLoader,
+                  element: <CadeteNegociosPage />,
+                },
+                {
+                  path: ":idCadete/negocios/:idNegocio/pedidos",
+                  element: <CadeteNegociosPedidosPage />,
+                },
+                {
+                  path: ":idCadete/negocios/:idNegocio/pedidos/:idPedido",
+                  element: <CadeteNegociosPedidosDetailPage />,
+                },
+                {
                   path: ":idCadete/info",
-                  element: <CadetePedidosPage />,
+                  element: <CadeteInfoPage />,
                 },
               ],
             },

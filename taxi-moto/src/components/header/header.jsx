@@ -13,6 +13,10 @@ function getCategories(type, id) {
           url: `/cadete/${id}/pedidos`,
         },
         {
+          content: "Negocios",
+          url: `/cadete/${id}/negocios`,
+        },
+        {
           content: "Información",
           url: `/cadete/${id}/info`,
         },
@@ -43,7 +47,6 @@ export const Header = () => {
   const categories = getCategories(user?.type, user?._id);
   const url = user ? "/" + user.type : "/";
   function toggleMenu(event) {
-    console.log("object");
     setShowMenu((state) => !state);
   }
   return (

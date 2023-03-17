@@ -1,31 +1,35 @@
 import { client } from "../cfg/mongodb.js";
 import { MongoContainer } from "../container/mongoContainer.js";
+import { getNegocios } from "./authController.js";
 
 const ordersCollection = client.db("taxi-moto").collection("orders");
 const ordersContainer = new MongoContainer(ordersCollection);
 
-export async function getOrdersByIdNegocio(user) {
-  const { _id } = user;
-  const query = { negocio: _id };
-  return await ordersContainer.getManyByFilter(query);
+export async function getOrdersByIdNegocio(idNegocio) {
+  const query = { "negocio._id": idNegocio };
+  return { orders: await ordersContainer.getManyByFilter(query) };
 }
-export async function getOrdersByIdCadete(user) {
-  const { _id } = user;
-  const query = { negocio: _id };
+export async function getOrdersByIdCadete(idCadete) {
+  const query = { "cadete._id": idCadete };
   const asignedOrders = await ordersContainer.getManyByFilter(query);
-  if(!asignedOrders.length){
-    const allOrders = await ordersContainer.getAll()
-    const sortedOrders = allOrders.reduce((acc,current)=>{
-      if(acc[current.negocio]){
-        acc[current.negocio].push(current)
-      }else{
-        acc[current.negocio]=[current]
-      }
-      return acc
-    },{})
-    return {sortedOrders}
-  }
-  return {asignedOrders};
+  return asignedOrders;
+}
+
+export async function getNegociosWithOrders() {
+  const negocios = await getNegocios();
+  const allOrders = await ordersContainer.getAll();
+  const sortedOrders = allOrders.reduce((acc, current) => {
+    if (acc[current.negocio._id]) {
+      acc[current.negocio._id].push(current);
+    } else {
+      acc[current.negocio._id] = [current];
+    }
+    return acc;
+  }, {});
+  negocios.forEach((negocio) => {
+    negocio.orders = sortedOrders[negocio._id] ?? [];
+  });
+  return negocios;
 }
 
 export async function getOrdersById(idPedido) {

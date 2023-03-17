@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { mapInputActions } from "../../store/mapInputSlice";
 export const PedidoForm = ({ order }) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const state = useSelector((state) => state);
   const error = useActionData();
   useEffect(() => {
@@ -50,8 +50,9 @@ export const PedidoForm = ({ order }) => {
   async function geoCodeHandler(event) {
     event.preventDefault();
     const results = await NominatimJS.search({
-      q: directionValue,
+      street: directionValue,
       country: "Argentina",
+      city: "Esperanza",
     });
     setDirectionResults(results);
   }
@@ -191,7 +192,7 @@ export const PedidoForm = ({ order }) => {
           {order && (
             <button
               className="btn btn-primary hover:btn-primary-focus w-1/2"
-              onClick={()=>navigate(-1)}
+              onClick={() => navigate(-1)}
             >
               Cancelar
             </button>

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   deleteOrder,
+  getNegociosWithOrders,
   getOrdersById,
   getOrdersByIdCadete,
   getOrdersByIdNegocio,
@@ -55,16 +56,6 @@ ordersRouter.get("/prices", (req, res, next) => {
   });
 });
 
-
-
-// ordersRouter.get("/", async (req, res, next) => {
-//   try {
-//     const data = await getOrders(req.body);
-//     return res.json(data);
-//   } catch (error) {
-//     next(error);
-//   }
-// });
 ordersRouter.post("/", async (req, res, next) => {
   try {
     const data = await postOrder(req.body);
@@ -74,37 +65,44 @@ ordersRouter.post("/", async (req, res, next) => {
   }
 });
 
-
+ordersRouter.get("/negocio/:idNegocio", async (req, res, next) => {
+  try {
+    const data = await getOrdersByIdNegocio(req.params.idNegocio);
+    return res.json(data);
+  } catch (error) {
+    next(error);
+  }
+});
 ordersRouter.get("/negocio", async (req, res, next) => {
   try {
-    const data = await getOrdersByIdNegocio(req.user);
+    const data = await getNegociosWithOrders();
     return res.json(data);
   } catch (error) {
     next(error);
   }
 });
 
-ordersRouter.get("/cadete", async (req, res, next) => {
+ordersRouter.get("/cadete/:idCadete", async (req, res, next) => {
   try {
-    const data = await getOrdersByIdCadete(req.user);
+    const data = await getOrdersByIdCadete(req.params.idCadete);
     return res.json(data);
   } catch (error) {
     next(error);
   }
 });
 
-ordersRouter.get("/:idPedido", async (req, res, next) => {
+ordersRouter.get("/:idOrder", async (req, res, next) => {
   try {
-    const data = await getOrdersById(req.params.idPedido);
+    const data = await getOrdersById(req.params.idOrder);
     return res.json(data);
   } catch (error) {
     next(error);
   }
 });
 
-ordersRouter.put("/:idPedido", async (req, res, next) => {
+ordersRouter.put("/:idOrder", async (req, res, next) => {
   try {
-    const data = await putOrder(req.params.idPedido, req.body);
+    const data = await putOrder(req.params.idOrder, req.body);
     return res.json(data);
   } catch (error) {
     console.log(error);
