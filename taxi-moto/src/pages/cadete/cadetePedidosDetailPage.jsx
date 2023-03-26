@@ -1,5 +1,5 @@
 import React from "react";
-import { redirect, useLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import { OrderDetail } from "../../components/cadete/orders/orderDetail";
 import { submitData } from "../../utils/fetch";
 

@@ -18,7 +18,11 @@ app.options("/*", (_, res) => {
 app.use(authRouter);
 
 app.get("/user", authMiddleware, async (req, res) => {
-  return res.json(await getUserById(req.user._id));
+  const user = await getUserById(req.user._id);
+  if (user) {
+    return res.json(user);
+  }
+  return next(new NotAuthError("No se ha encontrado usuario"));
 });
 app.get("/negocios", authMiddleware, async (req, res) => {
   return res.json(await getNegocios());
