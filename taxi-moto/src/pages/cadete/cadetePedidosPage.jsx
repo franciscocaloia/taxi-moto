@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { Link, useLoaderData } from "react-router-dom";
 import { OrdersList } from "../../components/cadete/orders/ordersList";
+import { fetchData } from "../../utils/fetch";
 import { isCompletedOrder } from "../../utils/validation";
 
 export const CadetePedidosPage = () => {
@@ -48,20 +49,5 @@ export const CadetePedidosPage = () => {
 };
 
 export async function loader({ params }) {
-  const token = localStorage.getItem("token");
-  if (token) {
-    const response = await fetch(
-      "http://localhost:8080/orders/cadete/" + params.idCadete,
-      {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      }
-    );
-    if (!response.ok) {
-      throw response;
-    }
-    return response;
-  }
-  return null;
+  return fetchData(`/orders/cadete/${params.idCadete}`);
 }

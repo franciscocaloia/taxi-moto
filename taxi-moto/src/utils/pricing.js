@@ -1,13 +1,7 @@
+import { fetchData } from "./fetch";
+
 export async function getPricing(distance) {
-  const token = localStorage.getItem("token");
-  const response = await fetch("http://localhost:8080/orders/prices", {
-    headers: {
-      Authorization: "Bearer " + token,
-    },
-  });
-  if (!response.ok) {
-    throw response;
-  }
+  const response = fetchData("/orders/prices");
   const prices = await response.json();
   const pricing = {
     shipment: 0,

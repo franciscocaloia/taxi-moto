@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { Outlet, useLoaderData } from "react-router-dom";
 import { Footer } from "../components/footer/footer";
 import { Header } from "../components/header/header";
-// import { useAuth } from "../store/useAuth";
 import { authActions } from "../store/authSlice";
 import { useDispatch } from "react-redux";
 

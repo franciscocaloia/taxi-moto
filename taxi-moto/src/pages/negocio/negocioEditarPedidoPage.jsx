@@ -1,6 +1,7 @@
 import React from "react";
 import { redirect, useLocation } from "react-router-dom";
 import { PedidoForm } from "../../components/negocio/PedidoForm";
+import { submitData } from "../../utils/fetch";
 import { getPricing } from "../../utils/pricing";
 
 export const NegocioEditarPedidoPage = () => {
@@ -28,22 +29,9 @@ export async function action({ request, params }) {
     amount,
     ...pricing,
   };
-
-  const token = localStorage.getItem("token");
-  if (token) {
-    const response = await fetch(`http://localhost:8080/orders/${order._id}`, {
-      method: "put",
-      headers: {
-        Authorization: "Bearer " + token,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(order),
-    });
-    if (!response.ok) {
-      throw response;
-    }
-    return redirect(`/negocio/${order.negocio}/pedidos/${order._id}`);
-  }
-
-  return null;
+  return submitData(
+    `/orders/${order._id}`,
+    { method: "put", body: JSON.stringify(order) },
+    `/negocio/${order.negocio}/pedidos/${order._id}`
+  );
 }

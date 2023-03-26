@@ -45,21 +45,9 @@ export async function action({ request, params }) {
     route,
   };
 
-  const token = localStorage.getItem("token");
-  if (token) {
-    const response = await fetch("http://localhost:8080/orders", {
-      method: "post",
-      headers: {
-        Authorization: "Bearer " + token,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(order),
-    });
-    if (!response.ok) {
-      throw response;
-    }
-    return redirect("/negocio");
-  }
-
-  return null;
+  return submitData(
+    "/orders",
+    { method: "post", body: JSON.stringify(order) },
+    "/negocio"
+  );
 }

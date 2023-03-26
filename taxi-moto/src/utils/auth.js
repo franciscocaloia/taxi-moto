@@ -3,7 +3,7 @@ import { json, redirect } from "react-router-dom";
 export async function checkAuthLoader({ request, params }) {
   const token = localStorage.getItem("token");
   if (token) {
-    const response = await fetch("http://localhost:8080/user", {
+    const response = await fetch(import.meta.env.VITE_API_HOST + "/user", {
       headers: {
         Authorization: "Bearer " + token,
       },

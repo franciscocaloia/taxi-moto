@@ -39,7 +39,7 @@ export async function action({ request, params }) {
     username: data.get("username"),
     password: data.get("password"),
   };
-  const response = await fetch("http://localhost:8080/login", {
+  const response = await fetch(import.meta.env.VITE_API_HOST + "/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -47,27 +47,23 @@ export async function action({ request, params }) {
     body: JSON.stringify(user),
   });
   if (!response.ok) {
-    return response;
-  } else {
-    const { token, type } = await response.json();
-    localStorage.setItem("token", token);
-    return redirect("/" + type);
+    throw response;
   }
+  const { token, type } = await response.json();
+  localStorage.setItem("token", token);
+  return redirect("/" + type);
 }
 
 export async function loader() {
   const token = localStorage.getItem("token");
   if (token) {
-    const response = await fetch("http://localhost:8080/user", {
+    const response = await fetch(import.meta.env.VITE_API_HOST + "/user", {
       headers: {
         Authorization: "Bearer " + token,
       },
     });
     if (!response.ok) {
-      throw json(
-        { message: "Error de autenticacion" },
-        { status: response.status }
-      );
+      throw response;
     }
     const { type } = await response.json();
     return redirect("/" + type);
