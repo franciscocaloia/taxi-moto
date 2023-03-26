@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { Link, useLoaderData } from "react-router-dom";
-import { OrdersList } from "../../components/cadete/orders/ordersList.jsx";
+import { OrdersList } from "../../components/cadete/orders/ordersList";
 import { fetchData } from "../../utils/fetch";
 import { isCompletedOrder } from "../../utils/validation";
 

@@ -1,7 +1,7 @@
 import React from "react";
-import { redirect, useLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import { NegocioOrderDetail } from "../../components/cadete/orders/negocioOrderDetail";
-import { fetchData } from "../../utils/fetch";
+import { fetchData, submitData } from "../../utils/fetch";
 
 export const CadeteNegociosPedidosDetailPage = () => {
   const order = useLoaderData();
