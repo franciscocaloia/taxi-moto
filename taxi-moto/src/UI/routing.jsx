@@ -20,6 +20,7 @@ export default function Routing() {
     },
   });
   useEffect(() => {
+    if (!map) return;
     if (!mapCoords) return;
     const routingControl = L.Routing.control({
       waypoints: [L.latLng(location), L.latLng(mapCoords)],

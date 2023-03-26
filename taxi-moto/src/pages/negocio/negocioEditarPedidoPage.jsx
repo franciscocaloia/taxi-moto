@@ -31,24 +31,16 @@ export async function action({ request, params }) {
 
   const token = localStorage.getItem("token");
   if (token) {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/orders/${order._id}`,
-        {
-          method: "put",
-          headers: {
-            Authorization: "Bearer " + token,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(order),
-        }
-      );
-      console.log(response);
-      if (!response.ok) {
-        throw response;
-      }
-    } catch (error) {
-      console.log(error);
+    const response = await fetch(`http://localhost:8080/orders/${order._id}`, {
+      method: "put",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(order),
+    });
+    if (!response.ok) {
+      throw response;
     }
     return redirect(`/negocio/${order.negocio}/pedidos/${order._id}`);
   }

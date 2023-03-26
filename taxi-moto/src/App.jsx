@@ -33,8 +33,19 @@ import {
 import { AuthProvider } from "./store/useAuth";
 import { checkAuthLoader, logoutAction } from "./utils/auth.js";
 import { CadeteInfoPage } from "./pages/cadete/cadeteInfoPage";
-import { CadeteNegociosPedidosPage } from "./pages/cadete/cadeteNegociosPedidosPage";
-import { CadeteNegociosPedidosDetailPage } from "./pages/cadete/cadeteNegociosPedidosDetailPage";
+import {
+  CadeteNegociosPedidosPage,
+  loader as cadeteNegociosPedidosLoader,
+} from "./pages/cadete/cadeteNegociosPedidosPage";
+import {
+  CadeteNegociosPedidosDetailPage,
+  loader as cadetePedidosDetailLoader,
+  action as cadeteNegociosPedidosDetailAction,
+} from "./pages/cadete/cadeteNegociosPedidosDetailPage";
+import {
+  CadetePedidosDetailPage,
+  action as cadetePedidoDetailAction,
+} from "./pages/cadete/cadetePedidosDetailPage";
 
 function App() {
   const router = createBrowserRouter([
@@ -106,17 +117,32 @@ function App() {
                   element: <CadetePedidosPage />,
                 },
                 {
+                  path: ":idCadete/pedidos/:idPedido",
+                  loader: cadetePedidosDetailLoader,
+                  element: <CadetePedidosDetailPage />,
+                },
+                {
                   path: ":idCadete/negocios",
                   loader: cadeteNegociosLoader,
                   element: <CadeteNegociosPage />,
                 },
                 {
                   path: ":idCadete/negocios/:idNegocio/pedidos",
+                  loader: cadeteNegociosPedidosLoader,
                   element: <CadeteNegociosPedidosPage />,
                 },
                 {
                   path: ":idCadete/negocios/:idNegocio/pedidos/:idPedido",
+                  loader: cadetePedidosDetailLoader,
                   element: <CadeteNegociosPedidosDetailPage />,
+                },
+                {
+                  path: ":idCadete/tomarPedido/:idPedido",
+                  action: cadeteNegociosPedidosDetailAction,
+                },
+                {
+                  path: ":idCadete/editarPedido/:idPedido",
+                  action: cadetePedidoDetailAction,
                 },
                 {
                   path: ":idCadete/info",

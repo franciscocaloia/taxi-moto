@@ -26,32 +26,28 @@ export async function loader({ params }) {
   return null;
 }
 
-export  async function action({request,params}){
-  const data = await request.formData()
-  const  update = {[`state.${data.get("state")}`]:true}
+export async function action({ request, params }) {
+  const data = await request.formData();
+  const update = { [`state.${data.get("state")}`]: true };
   const token = localStorage.getItem("token");
   if (token) {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/orders/${params.idPedido}`,
-        {
-          method: "put",
-          headers: {
-            Authorization: "Bearer " + token,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(update),
-        }
-      );
-      if (!response.ok) {
-        throw response;
+    const response = await fetch(
+      `http://localhost:8080/orders/${params.idPedido}`,
+      {
+        method: "put",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(update),
       }
-    } catch (error) {
-      console.log(error);
+    );
+    if (!response.ok) {
+      throw response;
     }
+
     return redirect(`/negocio/${params.idNegocio}/pedidos/${params.idPedido}`);
   }
 
   return null;
-
 }

@@ -45,7 +45,7 @@ export class MongoContainer {
   async update(id, object) {
     const result = await this.collection.updateOne(
       { _id: new ObjectId(id) },
-      { $set: object }
+      object
     );
     return result;
   }

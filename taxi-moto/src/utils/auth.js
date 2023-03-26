@@ -21,7 +21,6 @@ export async function checkAuthLoader({ request, params }) {
       return redirect("/" + user.type);
     }
   } else {
-    console.log();
     if (location.origin + "/" !== request.url) {
       return redirect("/");
     }

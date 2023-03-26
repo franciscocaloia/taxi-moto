@@ -10,7 +10,7 @@ export const CadeteNegociosPage = () => {
 export async function loader() {
   const token = localStorage.getItem("token");
   if (token) {
-    const response = await fetch("http://localhost:8080/orders/negocio", {
+    const response = await fetch("http://localhost:8080/negocios", {
       headers: {
         Authorization: "Bearer " + token,
       },

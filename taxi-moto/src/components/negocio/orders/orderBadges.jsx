@@ -6,6 +6,7 @@ export const OrderBadges = ({ state }) => {
       {Object.keys(state).map((key) => {
         return (
           <div
+            key={key}
             className={`badge w-full ${
               state[key] ? "badge-primary" : "badge-ghost"
             }`}

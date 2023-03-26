@@ -29,7 +29,6 @@ export async function loginUser(username, password) {
 
 export async function signupUserArray(array) {
   array.forEach(async (newUser) => {
-    console.log(newUser);
     const { username, password } = newUser;
     const existingUser = await usersContainer.getByFilter({ username });
     if (existingUser) {
@@ -63,6 +62,17 @@ export async function getNegocios() {
 
 export async function postUser(user) {
   return await usersContainer.save(user);
+}
+
+export async function putUser(idUser, user) {
+  delete user._id;
+  return await usersContainer.update(idUser, { $set: user });
+}
+
+export async function incUser(idUser, user) {
+  return await usersContainer.update(idUser, {
+    $inc: user,
+  });
 }
 
 export async function getUserByFilter(filter) {

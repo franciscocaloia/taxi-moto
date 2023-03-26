@@ -1,10 +1,8 @@
 import React from "react";
-import { isCompletedOrder } from "../../../utils/validation";
-import { CadeteCard } from "../../cadete/cadeteCard";
 import { Map } from "../../map/map";
 import { Routing } from "../../map/routing";
-import { OrderActions } from "./orderActions";
-import { OrderBadges } from "./orderBadges";
+import { OrderBadges } from "../../negocio/orders/orderBadges";
+import { CadeteOrderActions } from "./cadeteOrderActions";
 
 export const OrderDetail = ({ order }) => {
   let totalAmount = 0;
@@ -27,38 +25,18 @@ export const OrderDetail = ({ order }) => {
             <table className="table table-compact w-full">
               <tbody>
                 <tr>
-                  <th>Precio</th>
-                  <td>${order.totalAmount.amount}</td>
+                  <th>Total</th>
+                  <td>${totalAmount}</td>
                 </tr>
                 <tr>
-                  <th>Envio</th>
+                  <th>Ganancia</th>
                   <td>${order.totalAmount.shipment}</td>
                 </tr>
-                <tr>
-                  <th>Servicio</th>
-                  <td>${order.totalAmount.additional}</td>
-                </tr>
               </tbody>
-              <tfoot>
-                <tr>
-                  <th>Total</th>
-                  <th>${totalAmount}</th>
-                </tr>
-              </tfoot>
             </table>
             <OrderBadges state={order.state} />
           </div>
-          <h2 className="card-title capitalize border-b-2 border-b-base-200">
-            Cadete asignado
-          </h2>
-          <CadeteCard cadete={order.cadete} />
-
-          {!isCompletedOrder(order) && (
-            <>
-              <div className="border-b-2 border-b-base-200"></div>
-              <OrderActions order={order} />
-            </>
-          )}
+          <CadeteOrderActions order={order} />
         </div>
       </div>
     </div>

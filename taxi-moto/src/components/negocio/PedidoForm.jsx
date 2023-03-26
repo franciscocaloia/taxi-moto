@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Form, Link, useActionData, useNavigate } from "react-router-dom";
+import { Form, useActionData, useNavigate } from "react-router-dom";
 import useInput from "../../hooks/useInput";
 import { isValidText } from "../../utils/validation";
 import { MapInputForm } from "./mapInputForm";
-import { NominatimJS } from "@owsas/nominatim-js";
+// import { NominatimJS } from "@owsas/nominatim-js";
+import { Loader } from "@googlemaps/js-api-loader";
 import { ResultsList } from "./resultsList";
 import logoSearch from "../../assets/logoSearch.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { mapInputActions } from "../../store/mapInputSlice";
+const loader = new Loader({
+  apiKey: import.meta.env.VITE_GOOGLE_API_KEY,
+});
 export const PedidoForm = ({ order }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -49,12 +53,16 @@ export const PedidoForm = ({ order }) => {
   } = useInput(() => true, order?.date); //horario
   async function geoCodeHandler(event) {
     event.preventDefault();
-    const results = await NominatimJS.search({
-      street: directionValue,
-      country: "Argentina",
-      city: "Esperanza",
+    loader.load().then((google) => {
+      const geocoder = new google.maps.Geocoder();
+      geocoder.geocode({ address: directionValue }, (results, status) => {
+        if (status == "OK") {
+          setDirectionResults(results);
+        } else {
+          setDirectionResults([]);
+        }
+      });
     });
-    setDirectionResults(results);
   }
   async function clearResults() {
     setDirectionResults();

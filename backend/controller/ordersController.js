@@ -1,14 +1,21 @@
 import { client } from "../cfg/mongodb.js";
 import { MongoContainer } from "../container/mongoContainer.js";
-import { getNegocios } from "./authController.js";
+import { getNegocios, postUser } from "./authController.js";
 
 const ordersCollection = client.db("taxi-moto").collection("orders");
 const ordersContainer = new MongoContainer(ordersCollection);
 
 export async function getOrdersByIdNegocio(idNegocio) {
   const query = { "negocio._id": idNegocio };
-  return { orders: await ordersContainer.getManyByFilter(query) };
+  return await ordersContainer.getManyByFilter(query);
 }
+export async function getAvailableOrdersByIdNegocio(idNegocio) {
+  const query = {
+    $and: [{ "negocio._id": idNegocio }, { "state.TOMADO": false }],
+  };
+  return await ordersContainer.getManyByFilter(query);
+}
+
 export async function getOrdersByIdCadete(idCadete) {
   const query = { "cadete._id": idCadete };
   const asignedOrders = await ordersContainer.getManyByFilter(query);
@@ -17,7 +24,9 @@ export async function getOrdersByIdCadete(idCadete) {
 
 export async function getNegociosWithOrders() {
   const negocios = await getNegocios();
-  const allOrders = await ordersContainer.getAll();
+  const allOrders = await ordersContainer.getManyByFilter({
+    "state.TOMADO": false,
+  });
   const sortedOrders = allOrders.reduce((acc, current) => {
     if (acc[current.negocio._id]) {
       acc[current.negocio._id].push(current);
@@ -46,5 +55,5 @@ export async function deleteOrder(idOrder) {
 
 export async function putOrder(idOrder, order) {
   delete order._id;
-  return await ordersContainer.update(idOrder, order);
+  return await ordersContainer.update(idOrder, { $set: order });
 }

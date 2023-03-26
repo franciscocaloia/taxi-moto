@@ -12,6 +12,7 @@
     "@chakra-ui/react": "^2.5.1",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "@googlemaps/js-api-loader": "^1.15.1",
     "@owsas/nominatim-js": "^1.0.1",
     "@reduxjs/toolkit": "^1.9.3",
     "cross-fetch": "^3.1.5",
