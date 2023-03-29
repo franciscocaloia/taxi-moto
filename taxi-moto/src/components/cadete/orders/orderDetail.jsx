@@ -3,6 +3,7 @@ import { useNavigation } from "react-router-dom";
 import { isCompletedOrder } from "../../../utils/validation";
 import { Map } from "../../map/map";
 import { Routing } from "../../map/routing";
+import { NegocioCard } from "../../negocio/negocioCard";
 import { OrderBadges } from "../../negocio/orders/orderBadges";
 import { CadeteOrderActions } from "./cadeteOrderActions";
 
@@ -23,6 +24,7 @@ export const OrderDetail = ({ order }) => {
           <h2 className="card-title capitalize border-b-2 border-b-base-200">
             {order.direction}
           </h2>
+          <h3>Contacto: {order.phone}</h3>
           <div className="flex gap-3">
             <table className="table table-compact w-full">
               <tbody>
@@ -38,6 +40,8 @@ export const OrderDetail = ({ order }) => {
             </table>
             <OrderBadges state={order.state} />
           </div>
+
+          <NegocioCard negocio={order.negocio} />
           {!isCompletedOrder(order) && <CadeteOrderActions order={order} />}
         </div>
       </div>

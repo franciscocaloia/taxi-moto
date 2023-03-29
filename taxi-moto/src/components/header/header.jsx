@@ -49,7 +49,7 @@ export const Header = () => {
     setShowMenu((state) => !state);
   }
   return (
-    <header className="relative z-10">
+    <header className="relative z-50">
       <div className="w-full bg-primary h-24 shadow">
         <div className="w-5/6 mx-auto flex justify-between lg:w-4/5">
           <div className="flex justify-between items-center w-full lg:w-auto">

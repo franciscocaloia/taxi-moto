@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Outlet, useLoaderData } from "react-router-dom";
+import { Link, Outlet, useLoaderData } from "react-router-dom";
 import { Footer } from "../components/footer/footer";
 import { Header } from "../components/header/header";
 import { authActions } from "../store/authSlice";

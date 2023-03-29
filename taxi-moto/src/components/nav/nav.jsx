@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { redirect, useSubmit } from "react-router-dom";
+import { Link, redirect, useNavigation, useSubmit } from "react-router-dom";
 import Swal from "sweetalert2";
 import { NavItem } from "./navItem";
+import reloadIcon from "../../assets/reloadIcon.svg";
 
 export const Nav = ({ categories, showMenu }) => {
   const submit = useSubmit();
+  const naviation = useNavigation();
   function onLogout() {
     Swal.fire({
       title: "Cerrar sesion?",
@@ -31,6 +33,19 @@ export const Nav = ({ categories, showMenu }) => {
         {categories.map((category) => (
           <NavItem key={category.content} category={category} />
         ))}
+        <li className="flex justify-center my-6 lg:m-0">
+          <Link
+            className={`block w-5/6 text-md uppercase text-center text-[#f6e525] px-4 py-2 border-4 rounded-md bg-[#201d1e] border-[#f6e525] transition-all duration-150 hover:scale-105 lg:w-auto`}
+          >
+            <img
+              src={reloadIcon}
+              className={`h-6 ${
+                naviation.state === "loading" && "animate-spin"
+              }`}
+              alt="reload icon"
+            />
+          </Link>
+        </li>
         <li className="flex justify-center my-6 lg:m-0">
           <button
             onClick={onLogout}
