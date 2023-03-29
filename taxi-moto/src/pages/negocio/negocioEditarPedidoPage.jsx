@@ -1,13 +1,17 @@
 import React from "react";
-import { redirect, useLocation } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import { PedidoForm } from "../../components/negocio/PedidoForm";
-import { submitData } from "../../utils/fetch";
+import { fetchData, submitDataWithErrorReturn } from "../../utils/fetch";
 import { getPricing } from "../../utils/pricing";
 
 export const NegocioEditarPedidoPage = () => {
-  const location = useLocation();
-  return <PedidoForm order={location.state} />;
+  const order = useLoaderData();
+  return <PedidoForm order={order} />;
 };
+
+export async function loader({ params }) {
+  return fetchData(`/orders/${params.idPedido}`);
+}
 
 export async function action({ request, params }) {
   const data = await request.formData();
@@ -17,7 +21,7 @@ export async function action({ request, params }) {
     mapInput: { route },
   } = JSON.parse(data.get("state"));
   if (!(route.to && route.from)) {
-    return json("Debe ingresar una ubicacion en el mapa");
+    return json({ map: "Debe ingresar una ubicacion en el mapa" });
   }
   order.direction = data.get("direction");
   order.phone = data.get("phone");
@@ -29,7 +33,7 @@ export async function action({ request, params }) {
     amount,
     ...pricing,
   };
-  return submitData(
+  return submitDataWithErrorReturn(
     `/orders/${order._id}`,
     { method: "put", body: JSON.stringify(order) },
     `/negocio/${order.negocio}/pedidos/${order._id}`

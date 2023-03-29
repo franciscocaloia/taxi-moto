@@ -1,14 +1,17 @@
 import { Router } from "express";
-import { incUser, putUser } from "../controller/authController.js";
+import { getNegocios, incUser } from "../controller/authController.js";
 import {
+  abonarPedido,
   deleteOrder,
+  entregarPedido,
   getAvailableOrdersByIdNegocio,
-  getNegociosWithOrders,
   getOrdersById,
   getOrdersByIdCadete,
   getOrdersByIdNegocio,
   postOrder,
   putOrder,
+  retirarPedido,
+  tomarPedido,
 } from "../controller/ordersController.js";
 
 export const ordersRouter = Router();
@@ -79,7 +82,7 @@ ordersRouter.get("/negocio/:idNegocio", async (req, res, next) => {
 
 ordersRouter.get("/negocio", async (req, res, next) => {
   try {
-    const data = await getNegociosWithOrders();
+    const data = await getNegocios();
     return res.json(data);
   } catch (error) {
     next(error);
@@ -115,21 +118,27 @@ ordersRouter.get("/:idOrder", async (req, res, next) => {
 
 ordersRouter.put("/:idOrder", async (req, res, next) => {
   try {
-    const order = await getOrdersById(req.params.idOrder);
-    if (req.body["state.TOMADO"]) {
-      await incUser(order.negocio._id, {
-        availableOrders: -1,
-        debt: order.totalAmount.additional,
-      });
-    }
-    if (order.state.TOMADO && req.body.totalAmount) {
-      await incUser(order.negocio._id, {
-        debt: req.body.totalAmount.additional - order.totalAmount.additional,
-      });
-    }
     const data = await putOrder(req.params.idOrder, req.body);
     return res.json(data);
   } catch (error) {
+    next(error);
+  }
+});
+
+ordersRouter.put("/:idOrder/state/:state", async (req, res, next) => {
+  try {
+    const functions = {
+      TOMADO: tomarPedido,
+      RETIRADO: retirarPedido,
+      ABONADO: abonarPedido,
+      ENTREGADO: entregarPedido,
+    };
+    console.log(req.user);
+    res.json(
+      await functions[req.params.state](req.params.idOrder, req.user._id)
+    );
+  } catch (error) {
+    console.log(error);
     next(error);
   }
 });

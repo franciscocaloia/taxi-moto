@@ -1,4 +1,6 @@
 import React from "react";
+import { useNavigation } from "react-router-dom";
+import { isCompletedOrder } from "../../../utils/validation";
 import { Map } from "../../map/map";
 import { Routing } from "../../map/routing";
 import { OrderBadges } from "../../negocio/orders/orderBadges";
@@ -36,7 +38,7 @@ export const OrderDetail = ({ order }) => {
             </table>
             <OrderBadges state={order.state} />
           </div>
-          <CadeteOrderActions order={order} />
+          {!isCompletedOrder(order) && <CadeteOrderActions order={order} />}
         </div>
       </div>
     </div>

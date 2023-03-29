@@ -19,39 +19,48 @@ export const OrderActions = ({ order }) => {
         formData.append("state", event.target.value);
         submit(formData, {
           method: "put",
-          action: `/negocio/${order.negocio}/editarEstadoPedido/${order._id}`,
         });
       }
     });
   }
   return (
-    <div className="flex flex-1 flex-col justify-between gap-1">
-      {!order.state.RETIRADO && (
-        <button
-          value="RETIRADO"
-          className="btn btn-primary w-full"
-          onClick={onClick}
-        >
-          Pedido retirado
-        </button>
+    <>
+      {navigation.state === "submitting" ? (
+        <img
+          className="animate-spin h-6 w-6"
+          src={loadingIcon}
+          alt="loading icon"
+        />
+      ) : (
+        <div className="flex flex-1 flex-col justify-between gap-1">
+          {!order.state.RETIRADO && (
+            <button
+              value="RETIRADO"
+              className="btn btn-primary w-full"
+              onClick={onClick}
+            >
+              Pedido retirado
+            </button>
+          )}
+          {!order.state.ABONADO && (
+            <button
+              value="ABONADO"
+              className="btn btn-primary w-full"
+              onClick={onClick}
+            >
+              Pedido abonado
+            </button>
+          )}
+          <Link
+            state={order}
+            to={`/negocio/editarpedido/${order._id}`}
+            className="btn btn-primary w-full "
+          >
+            Editar pedido
+          </Link>
+          <button className="btn btn-error  w-full ">Cancelar pedido</button>
+        </div>
       )}
-      {!order.state.ABONADO && (
-        <button
-          value="ABONADO"
-          className="btn btn-primary w-full"
-          onClick={onClick}
-        >
-          Pedido abonado
-        </button>
-      )}
-      <Link
-        state={order}
-        to={`/negocio/editarpedido/${order._id}`}
-        className="btn btn-primary w-full "
-      >
-        Editar pedido
-      </Link>
-      <button className="btn btn-error  w-full ">Cancelar pedido</button>
-    </div>
+    </>
   );
 };

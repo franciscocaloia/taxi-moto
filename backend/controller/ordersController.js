@@ -1,6 +1,12 @@
 import { client } from "../cfg/mongodb.js";
 import { MongoContainer } from "../container/mongoContainer.js";
-import { getNegocios, postUser } from "./authController.js";
+import { UnprocessableError } from "../util/error.js";
+import {
+  getNegocios,
+  getUserById,
+  incUser,
+  postUser,
+} from "./authController.js";
 
 const ordersCollection = client.db("taxi-moto").collection("orders");
 const ordersContainer = new MongoContainer(ordersCollection);
@@ -53,7 +59,62 @@ export async function deleteOrder(idOrder) {
   return await ordersContainer.delete(idOrder);
 }
 
-export async function putOrder(idOrder, order) {
+export async function putOrder(idOrder, update) {
+  const order = await getOrdersById(idOrder);
+  if (order.state.ENTREGADO)
+    throw new UnprocessableError("El pedido ya fue entregado");
+  if (order.state.TOMADO && update.totalAmount) {
+    await incUser(order.negocio._id, {
+      debt: update.totalAmount.additional - order.totalAmount.additional,
+    });
+  }
   delete order._id;
   return await ordersContainer.update(idOrder, { $set: order });
+}
+
+export async function tomarPedido(idOrder, idCadete) {
+  const order = await ordersContainer.getById(idOrder);
+  if (order.cadete) {
+    throw new UnprocessableError("El pedido ya tiene un cadete asignado");
+  }
+  const cadete = await getUserById(idCadete);
+  await incUser(order.negocio._id, {
+    availableOrders: -1,
+    debt: order.totalAmount.additional,
+  });
+  await ordersContainer.update(idOrder, { $set: { cadete } });
+  return await setState(idOrder, "TOMADO");
+}
+
+export async function retirarPedido(idOrder) {
+  const order = await ordersContainer.getById(idOrder);
+  if (!order.state.TOMADO) {
+    throw new UnprocessableError("El pedido debe tener un cadete asignado");
+  }
+  return await setState(idOrder, "RETIRADO");
+}
+
+export async function abonarPedido(idOrder) {
+  const order = await ordersContainer.getById(idOrder);
+  if (!order.state.TOMADO) {
+    throw new UnprocessableError("El pedido debe tener un cadete asignado");
+  }
+  return await setState(idOrder, "ABONADO");
+}
+
+export async function entregarPedido(idOrder) {
+  const order = await ordersContainer.getById(idOrder);
+  if (!order.state.RETIRADO) {
+    throw new UnprocessableError("El pedido debe haber sido retirado");
+  }
+  await incUser(order.cadete._id, {
+    earnings: order.totalAmount.shipment,
+  });
+  return await setState(idOrder, "ENTREGADO");
+}
+
+export async function setState(idOrder, state) {
+  return await ordersContainer.update(idOrder, {
+    $set: { [`state.${state}`]: true },
+  });
 }

@@ -1,10 +1,22 @@
-import React from "react";
-import { useLoaderData } from "react-router-dom";
+import React, { useEffect } from "react";
+import { redirect, useActionData, useLoaderData } from "react-router-dom";
+import { toast } from "react-toastify";
 import { OrderDetail } from "../../components/negocio/orders/orderDetail";
-import { fetchData, submitData } from "../../utils/fetch";
+import {
+  fetchData,
+  submitData,
+  submitDataWithErrorReturn,
+} from "../../utils/fetch";
 
 export const NegocioPedidosDetailPage = () => {
   const order = useLoaderData();
+  const error = useActionData();
+  useEffect(() => {
+    console.log(error);
+    if (error) {
+      toast.error("Error: " + error.data?.message);
+    }
+  }, [error]);
   return <OrderDetail order={order} />;
 };
 
@@ -14,12 +26,10 @@ export async function loader({ params }) {
 
 export async function action({ request, params }) {
   const data = await request.formData();
-  const update = { [`state.${data.get("state")}`]: true };
-  return submitData(
-    `/orders/${params.idPedido}`,
+  return submitDataWithErrorReturn(
+    `/orders/${params.idPedido}/state/${data.get("state")}`,
     {
       method: "put",
-      body: JSON.stringify(update),
     },
     `/negocio/${params.idNegocio}/pedidos/${params.idPedido}`
   );

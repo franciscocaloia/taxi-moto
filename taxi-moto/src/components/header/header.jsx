@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { Nav } from "../nav/nav";
 import { Logo } from "./logo";
 import menuIcon from "../../assets/menuIcon.svg";
-import { useNavigation } from "react-router-dom";
 function getCategories(type, id) {
   switch (type) {
     case "cadete":

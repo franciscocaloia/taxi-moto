@@ -1,9 +1,14 @@
 import React from "react";
+import { useNavigation } from "react-router-dom";
 
 export const Footer = () => {
+  const navigation = useNavigation();
   return (
     <>
-      <footer className="footer items-center p-4 bg-black text-neutral-content">
+      <footer className="footer items-center p-4 bg-black text-neutral-content relative">
+        {navigation.state === "loading" && (
+          <progress className="progress progress-primary w-full absolute left-0 -top-2 rounded-none"></progress>
+        )}
         <div className="items-center grid-flow-col">
           <p>Copyright © 2023 - All right reserved</p>
         </div>

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Form, useActionData, useNavigate } from "react-router-dom";
+import { Form, redirect, useActionData, useNavigate } from "react-router-dom";
 import useInput from "../../hooks/useInput";
 import { isValidText } from "../../utils/validation";
 import { MapInputForm } from "./mapInputForm";
-// import { NominatimJS } from "@owsas/nominatim-js";
 import { Loader } from "@googlemaps/js-api-loader";
 import { ResultsList } from "./resultsList";
 import logoSearch from "../../assets/logoSearch.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { mapInputActions } from "../../store/mapInputSlice";
+import { toast } from "react-toastify";
 const loader = new Loader({
   apiKey: import.meta.env.VITE_GOOGLE_API_KEY,
 });
@@ -21,7 +21,11 @@ export const PedidoForm = ({ order }) => {
     if (order) {
       dispatch(mapInputActions.setMapCoords(order.route.to));
     }
-  }, []);
+    if (error?.data) {
+      toast.error("Error: " + error.data.message);
+    }
+  }, [error]);
+
   const [directionResults, setDirectionResults] = useState();
   const {
     inputValue: directionValue,
@@ -55,13 +59,16 @@ export const PedidoForm = ({ order }) => {
     event.preventDefault();
     loader.load().then((google) => {
       const geocoder = new google.maps.Geocoder();
-      geocoder.geocode({ address: directionValue }, (results, status) => {
-        if (status == "OK") {
-          setDirectionResults(results);
-        } else {
-          setDirectionResults([]);
+      geocoder.geocode(
+        { address: directionValue + " Esperanza" },
+        (results, status) => {
+          if (status == "OK") {
+            setDirectionResults(results);
+          } else {
+            setDirectionResults([]);
+          }
         }
-      });
+      );
     });
   }
   async function clearResults() {
@@ -186,13 +193,13 @@ export const PedidoForm = ({ order }) => {
         </div>
         <div
           className={`w-full relative h-80 my-6 lg:p-6 lg:m-0 lg:h-full row-start-2 lg:row-start-1 lg:row-span-5 lg:col-start-2 ${
-            error && "border border-error"
+            error?.map && "border border-error"
           }`}
         >
           <MapInputForm />
-          {error && (
+          {error?.map && (
             <smal className="absolute w-full text-base-100 bg-error top-full lg:bottom-0 lg:top-auto left-0 text-center">
-              {error}
+              {error.map}
             </smal>
           )}
         </div>

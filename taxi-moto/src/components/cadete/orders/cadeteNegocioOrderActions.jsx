@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { useSubmit } from "react-router-dom";
 import Swal from "sweetalert2";
+import loadingIcon from "../../../assets/loadingIcon.svg";
 
 export const CadeteNegocioOrderActions = ({ order }) => {
   const submit = useSubmit();
@@ -21,20 +22,31 @@ export const CadeteNegocioOrderActions = ({ order }) => {
         formData.append("cadete", JSON.stringify(user));
         submit(formData, {
           method: "put",
-          action: `/cadete/${user._id}/tomarPedido/${order._id}`,
         });
       }
     });
   }
   return (
-    <div className="flex flex-1 flex-col justify-between gap-1">
-      <button
-        value="TOMADO"
-        className="btn btn-primary w-full"
-        onClick={onClick}
-      >
-        Tomar pedido
-      </button>
-    </div>
+    <>
+      {navigation.state === "submitting" ? (
+        <img
+          className="animate-spin h-6 w-6"
+          src={loadingIcon}
+          alt="loading icon"
+        />
+      ) : (
+        <div className="flex flex-1 flex-col justify-between gap-1">
+          {!order.state.TOMADO && (
+            <button
+              value="TOMADO"
+              className="btn btn-primary w-full"
+              onClick={onClick}
+            >
+              Tomar pedido
+            </button>
+          )}
+        </div>
+      )}
+    </>
   );
 };

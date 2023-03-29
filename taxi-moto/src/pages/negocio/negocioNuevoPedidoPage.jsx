@@ -1,6 +1,7 @@
 import React from "react";
-import { json, redirect } from "react-router-dom";
+import { json } from "react-router-dom";
 import { PedidoForm } from "../../components/negocio/PedidoForm";
+import { submitData } from "../../utils/fetch";
 import { getPricing } from "../../utils/pricing";
 
 export const NegocioNuevoPedidoPage = () => {
@@ -19,7 +20,7 @@ export async function action({ request, params }) {
     mapInput: { route },
   } = JSON.parse(data.get("state"));
   if (!(route.to && route.from)) {
-    return json("Debe ingresar una ubicacion en el mapa");
+    return json({ map: "Debe ingresar una ubicacion en el mapa" });
   }
   const direction = data.get("direction");
   const phone = data.get("phone");
@@ -44,7 +45,6 @@ export async function action({ request, params }) {
     },
     route,
   };
-
   return submitData(
     "/orders",
     { method: "post", body: JSON.stringify(order) },

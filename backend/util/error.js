@@ -12,6 +12,13 @@ export class UnprocessableError {
   }
 }
 
+export class GoneError {
+  constructor(message) {
+    this.message = message;
+    this.status = 410;
+  }
+}
+
 export class NotAuthError {
   constructor(message) {
     this.message = message;

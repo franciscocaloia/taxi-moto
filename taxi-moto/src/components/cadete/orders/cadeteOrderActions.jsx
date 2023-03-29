@@ -1,11 +1,12 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { useSubmit } from "react-router-dom";
+import { useNavigation, useSubmit } from "react-router-dom";
 import Swal from "sweetalert2";
+import loadingIcon from "../../../assets/loadingIcon.svg";
 
 export const CadeteOrderActions = ({ order }) => {
+  const navigation = useNavigation();
   const submit = useSubmit();
-  const user = useSelector((state) => state.auth);
   function onClick(event) {
     Swal.fire({
       title: `Desea confirmar el estado del pedido [${event.target.value}]?`,
@@ -18,23 +19,33 @@ export const CadeteOrderActions = ({ order }) => {
       if (result.isConfirmed) {
         const formData = new FormData();
         formData.append("state", event.target.value);
-        formData.append("cadete", JSON.stringify(user));
         submit(formData, {
           method: "put",
-          action: `/cadete/${user._id}/editarPedido/${order._id}`,
         });
       }
     });
   }
   return (
-    <div className="flex flex-1 flex-col justify-between gap-1">
-      <button
-        value="ENTREGADO"
-        className="btn btn-primary w-full"
-        onClick={onClick}
-      >
-        Pedido entregado
-      </button>
-    </div>
+    <>
+      {navigation.state === "submitting" ? (
+        <img
+          className="animate-spin h-6 w-6"
+          src={loadingIcon}
+          alt="loading icon"
+        />
+      ) : (
+        <div className="flex flex-1 flex-col justify-between gap-1">
+          {!order.state.ENTREGADO && (
+            <button
+              value="ENTREGADO"
+              className="btn btn-primary w-full"
+              onClick={onClick}
+            >
+              Pedido entregado
+            </button>
+          )}
+        </div>
+      )}
+    </>
   );
 };

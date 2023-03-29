@@ -1,7 +1,7 @@
 import { fetchData } from "./fetch";
 
 export async function getPricing(distance) {
-  const response = fetchData("/orders/prices");
+  const response = await fetchData("/orders/prices");
   const prices = await response.json();
   const pricing = {
     shipment: 0,

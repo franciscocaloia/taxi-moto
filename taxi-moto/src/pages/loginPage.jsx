@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
-import { redirect, useActionData, useRouteLoaderData } from "react-router-dom";
+import { redirect, useActionData } from "react-router-dom";
 import { LoginForm } from "../components/loginForm";
 import "react-toastify/dist/ReactToastify.css";
 export const LoginPage = () => {
   const actionData = useActionData();
   useEffect(() => {
+    console.log(actionData);
     if (actionData) {
-      toast.error("Error: " + actionData.message);
+      toast.error("Error: " + actionData.data?.message);
     }
   }, [actionData]);
   return (
@@ -16,19 +17,6 @@ export const LoginPage = () => {
         Inicio de sesion
       </h1>
       <LoginForm />
-      <ToastContainer
-        position="bottom-left"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        className="bottom-36 md:bottom-24"
-      />
     </>
   );
 };
@@ -47,7 +35,7 @@ export async function action({ request, params }) {
     body: JSON.stringify(user),
   });
   if (!response.ok) {
-    throw response;
+    return response;
   }
   const { token, type } = await response.json();
   localStorage.setItem("token", token);

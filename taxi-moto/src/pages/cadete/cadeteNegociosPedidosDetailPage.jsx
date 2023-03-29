@@ -1,10 +1,22 @@
-import React from "react";
-import { useLoaderData } from "react-router-dom";
+import React, { useEffect } from "react";
+import { json, redirect, useActionData, useLoaderData } from "react-router-dom";
+import { toast } from "react-toastify";
 import { NegocioOrderDetail } from "../../components/cadete/orders/negocioOrderDetail";
-import { fetchData, submitData } from "../../utils/fetch";
+import {
+  fetchData,
+  submitData,
+  submitDataWithErrorReturn,
+} from "../../utils/fetch";
 
 export const CadeteNegociosPedidosDetailPage = () => {
   const order = useLoaderData();
+  const error = useActionData();
+  useEffect(() => {
+    console.log(error);
+    if (error) {
+      toast.error("Error: " + error.data?.message);
+    }
+  }, [error]);
   return <NegocioOrderDetail order={order} />;
 };
 export async function loader({ params }) {
@@ -13,15 +25,9 @@ export async function loader({ params }) {
 
 export async function action({ params, request }) {
   const data = await request.formData();
-  const cadete = JSON.parse(data.get("cadete"));
-  const update = { "state.TOMADO": true, cadete };
-
-  return submitData(
-    `/orders/${params.idPedido}`,
-    {
-      method: "put",
-      body: JSON.stringify(update),
-    },
+  return submitDataWithErrorReturn(
+    `/orders/${params.idPedido}/state/${data.get("state")}`,
+    { method: "put" },
     `/cadete/${params.idCadete}/pedidos`
   );
 }

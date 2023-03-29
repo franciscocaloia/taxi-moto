@@ -1,7 +1,7 @@
 import React from "react";
-import { Form } from "react-router-dom";
+import { Form, useNavigation } from "react-router-dom";
 import useInput from "../hooks/useInput";
-
+import loadingIcon from "../assets/loadingIcon.svg";
 function notEmpty(value) {
   return value.trim() !== "";
 }
@@ -21,6 +21,7 @@ export const LoginForm = () => {
     inputChangeHandler: passwordChangeHandler,
     inputBlurHandler: passwordBlurHandler,
   } = useInput(notEmpty);
+  const navigation = useNavigation();
   return (
     <section className="flex flex-1">
       <Form
@@ -66,7 +67,14 @@ export const LoginForm = () => {
             className="btn btn-primary hover:btn-primary-focus w-full max-w-xs"
             disabled={!(passwordValid && nameValid)}
           >
-            Ingresar
+            {navigation.state === "submitting" && (
+              <img
+                className="animate-spin h-6 w-6"
+                src={loadingIcon}
+                alt="loading icon"
+              />
+            )}
+            {navigation.state === "idle" && "Ingresar"}
           </button>
         </div>
       </Form>
