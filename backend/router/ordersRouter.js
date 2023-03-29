@@ -125,6 +125,16 @@ ordersRouter.put("/:idOrder", async (req, res, next) => {
   }
 });
 
+ordersRouter.put("/:idOrder/cancelar", async (req, res, next) => {
+  try {
+    const data = await cancelOrder(req.params.idOrder);
+    req.app.io;
+    return res.json(data);
+  } catch (error) {
+    next(error);
+  }
+});
+
 ordersRouter.put("/:idOrder/state/:state", async (req, res, next) => {
   try {
     const functions = {
