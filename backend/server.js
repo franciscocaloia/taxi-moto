@@ -6,6 +6,8 @@ import {
 } from "./controller/authController.js";
 import { authMiddleware, authRouter } from "./router/authRouter.js";
 import { ordersRouter } from "./router/ordersRouter.js";
+import { Server as IOServer } from "socket.io";
+import { Server as HTTPServer } from "http";
 
 const app = express();
 app.use(express.json());
@@ -48,6 +50,14 @@ app.use((error, req, res, next) => {
   const message = error.message || "Something went wrong.";
   res.status(status).json({ data: { message: message } });
 });
-app.listen(8080, () => {
-  console.log("Listening on port");
+
+// app.listen(8080, () => {
+//   console.log("Listening on port");
+// });
+
+const httpServer = new HTTPServer(app);
+const io = new IOServer(httpServer);
+app.io = io;
+httpServer.listen(8080, () => {
+  console.log("Listening on port" + httpServer.address().port);
 });
