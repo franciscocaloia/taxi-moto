@@ -33,7 +33,10 @@ import {
 } from "./pages/negocio/negocioPedidosPage";
 
 import { checkAuthLoader, logoutAction } from "./utils/auth.js";
-import { CadeteInfoPage } from "./pages/cadete/cadeteInfoPage";
+import {
+  CadeteInfoPage,
+  action as cadeteInfoAction,
+} from "./pages/cadete/cadeteInfoPage";
 import {
   CadeteNegociosPedidosPage,
   loader as cadeteNegociosPedidosLoader,
@@ -147,6 +150,7 @@ function App() {
                 },
                 {
                   path: ":idCadete/info",
+                  action: cadeteInfoAction,
                   element: <CadeteInfoPage />,
                 },
               ],

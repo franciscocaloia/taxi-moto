@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Form, redirect, useActionData, useNavigate } from "react-router-dom";
+import {
+  Form,
+  redirect,
+  useActionData,
+  useNavigate,
+  useNavigation,
+} from "react-router-dom";
 import useInput from "../../hooks/useInput";
 import { isValidText } from "../../utils/validation";
 import { MapInputForm } from "./mapInputForm";
@@ -15,6 +21,7 @@ const loader = new Loader({
 export const PedidoForm = ({ order }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const navigation = useNavigation();
   const state = useSelector((state) => state);
   const error = useActionData();
   useEffect(() => {
@@ -75,8 +82,7 @@ export const PedidoForm = ({ order }) => {
     setDirectionResults();
   }
   function submitHandler(e) {
-    dispatch(mapInputActions.setMapCoords());
-    dispatch(mapInputActions.setRoute());
+    dispatch(mapInputActions.reset());
   }
   return (
     <div className="w-full  lg:w-4/5 p-6 mx-auto">
@@ -213,7 +219,10 @@ export const PedidoForm = ({ order }) => {
             </button>
           )}
           <button
-            disabled={!(directionValid && phoneValid && amountValid)}
+            disabled={
+              !(directionValid && phoneValid && amountValid) ||
+              navigation.state === "submitting"
+            }
             className={`btn btn-primary hover:btn-primary-focus ${
               order ? "w-1/2" : "w-full"
             }`}
