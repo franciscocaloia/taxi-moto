@@ -31,7 +31,7 @@ import {
   loader as negocioPedidosLoader,
   NegocioPedidosPage,
 } from "./pages/negocio/negocioPedidosPage";
-import { AuthProvider } from "./store/useAuth";
+
 import { checkAuthLoader, logoutAction } from "./utils/auth.js";
 import { CadeteInfoPage } from "./pages/cadete/cadeteInfoPage";
 import {
@@ -47,8 +47,13 @@ import {
   CadetePedidosDetailPage,
   action as cadetePedidoDetailAction,
 } from "./pages/cadete/cadetePedidosDetailPage";
-
+import { socket } from "./socket.js";
+import { useEffect } from "react";
 function App() {
+  useEffect(() => {
+    socket.on("");
+  }, []);
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -156,11 +161,7 @@ function App() {
     },
   ]);
 
-  return (
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

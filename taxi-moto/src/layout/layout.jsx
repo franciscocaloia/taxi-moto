@@ -5,7 +5,6 @@ import { Header } from "../components/header/header";
 import { authActions } from "../store/authSlice";
 import { useDispatch } from "react-redux";
 import { ToastContainer } from "react-toastify";
-
 export const Layout = () => {
   const user = useLoaderData();
   const dispatch = useDispatch();
