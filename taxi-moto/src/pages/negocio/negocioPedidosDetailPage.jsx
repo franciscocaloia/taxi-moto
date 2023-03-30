@@ -17,7 +17,7 @@ export const NegocioPedidosDetailPage = () => {
       toast.error("Error: " + error.data?.message);
     }
   }, [error]);
-  return <OrderDetail order={order} />;
+  return <>{order && <OrderDetail order={order} />}</>;
 };
 
 export async function loader({ params }) {

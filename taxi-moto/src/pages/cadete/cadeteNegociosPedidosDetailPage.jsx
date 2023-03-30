@@ -17,7 +17,7 @@ export const CadeteNegociosPedidosDetailPage = () => {
       toast.error("Error: " + error.data?.message);
     }
   }, [error]);
-  return <NegocioOrderDetail order={order} />;
+  return <>{order && <NegocioOrderDetail order={order} />}</>;
 };
 export async function loader({ params }) {
   return fetchData(`/orders/${params.idPedido}`);
