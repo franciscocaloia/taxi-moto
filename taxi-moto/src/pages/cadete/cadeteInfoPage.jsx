@@ -24,7 +24,7 @@ export const CadeteInfoPage = () => {
 };
 
 export function action({ params }) {
-  submitData(
+  return submitData(
     `/user/${params.idCadete}`,
     {
       method: "put",

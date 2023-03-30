@@ -17,6 +17,9 @@ export const NegocioOrderListItem = ({ order }) => {
             <h2 className="card-title capitalize">{order.direction}</h2>
             <p className="pl-4">Total: ${totalAmount}</p>
             <p className="pl-4">Ganancia: ${order.totalAmount.shipment}</p>
+            <p className="pl-4">
+              Horario: {order.date === "" ? "Entrega Inmediata" : order.date}
+            </p>
           </div>
         </div>
       </Link>
