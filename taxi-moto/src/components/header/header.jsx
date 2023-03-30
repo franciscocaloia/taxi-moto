@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Nav } from "../nav/nav";
 import { Logo } from "./logo";
 import menuIcon from "../../assets/menuIcon.svg";
+import { UIActions } from "../../store/UISlice";
+import { useLocation } from "react-router-dom";
 function getCategories(type, id) {
   switch (type) {
     case "cadete":
@@ -41,20 +43,25 @@ function getCategories(type, id) {
 }
 
 export const Header = () => {
+  const dispatch = useDispatch();
+  const location = useLocation();
   const user = useSelector((state) => state.auth);
-  const [showMenu, setShowMenu] = useState(false);
+  const showMenu = useSelector((state) => state.UI.showMenu);
   const categories = getCategories(user?.type, user?._id);
   const url = user ? "/" + user.type : "/";
-  function toggleMenu(event) {
-    setShowMenu((state) => !state);
+  function onClick(event) {
+    dispatch(UIActions.toggleShowMenu());
   }
+  useEffect(() => {
+    dispatch(UIActions.hideMenu());
+  }, [location.pathname]);
   return (
     <header className="relative z-50">
       <div className="w-full bg-primary h-24 shadow">
         <div className="w-5/6 mx-auto flex justify-between lg:w-4/5">
           <div className="flex justify-between items-center w-full lg:w-auto">
             <Logo url={url} />
-            <button className="h-24 py-6 lg:p-6 lg:hidden" onClick={toggleMenu}>
+            <button className="h-24 py-6 lg:p-6 lg:hidden" onClick={onClick}>
               <img className="h-full" src={menuIcon} alt="menu icon" />
             </button>
           </div>

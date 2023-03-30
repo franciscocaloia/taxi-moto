@@ -50,10 +50,6 @@ import {
 import { socket } from "./socket.js";
 import { useEffect } from "react";
 function App() {
-  useEffect(() => {
-    socket.on("");
-  }, []);
-
   const router = createBrowserRouter([
     {
       path: "/",

@@ -7,6 +7,7 @@ import { OrderActions } from "./orderActions";
 import { OrderBadges } from "./orderBadges";
 
 export const OrderDetail = ({ order }) => {
+  if (!order) return;
   let totalAmount = 0;
   for (const key in order.totalAmount) {
     totalAmount += parseInt(order.totalAmount[key]);
