@@ -1,12 +1,7 @@
 import { client } from "../cfg/mongodb.js";
 import { MongoContainer } from "../container/mongoContainer.js";
 import { UnprocessableError } from "../util/error.js";
-import {
-  getNegocios,
-  getUserById,
-  incUser,
-  postUser,
-} from "./authController.js";
+import { getNegocios, getUserById, incUser } from "./authController.js";
 
 const ordersCollection = client.db("taxi-moto").collection("orders");
 const ordersContainer = new MongoContainer(ordersCollection);
@@ -35,15 +30,16 @@ export async function getNegociosWithOrders() {
   });
   const sortedOrders = allOrders.reduce((acc, current) => {
     if (acc[current.negocio._id]) {
-      acc[current.negocio._id].push(current);
+      acc[current.negocio._id]++;
     } else {
-      acc[current.negocio._id] = [current];
+      acc[current.negocio._id] = 1;
     }
     return acc;
   }, {});
   negocios.forEach((negocio) => {
-    negocio.orders = sortedOrders[negocio._id] ?? [];
+    negocio.availableOrders = sortedOrders[negocio._id] ?? 0;
   });
+  console.log(negocios);
   return negocios;
 }
 
@@ -68,8 +64,15 @@ export async function putOrder(idOrder, update) {
       debt: update.totalAmount.additional - order.totalAmount.additional,
     });
   }
-  delete order._id;
-  return await ordersContainer.update(idOrder, { $set: order });
+  delete update._id;
+  return await ordersContainer.update(idOrder, { $set: update });
+}
+
+export async function cancelarPedido(idOrder) {
+  const order = await ordersContainer.getById(idOrder);
+  if (order.cadete) {
+    throw new UnprocessableError("El pedido ya tiene un cadete asignado");
+  }
 }
 
 export async function tomarPedido(idOrder, idCadete) {
@@ -79,7 +82,6 @@ export async function tomarPedido(idOrder, idCadete) {
   }
   const cadete = await getUserById(idCadete);
   await incUser(order.negocio._id, {
-    availableOrders: -1,
     debt: order.totalAmount.additional,
   });
   await ordersContainer.update(idOrder, { $set: { cadete } });

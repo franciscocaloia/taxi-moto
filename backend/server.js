@@ -8,6 +8,7 @@ import { authMiddleware, authRouter } from "./router/authRouter.js";
 import { ordersRouter } from "./router/ordersRouter.js";
 import { Server as IOServer } from "socket.io";
 import { Server as HTTPServer } from "http";
+import { getNegociosWithOrders } from "./controller/ordersController.js";
 
 const app = express();
 app.use(express.json());
@@ -41,7 +42,7 @@ app.put("/user/:idUser", authMiddleware, async (req, res, next) => {
 });
 
 app.get("/negocios", authMiddleware, async (req, res) => {
-  return res.json(await getNegocios());
+  return res.json(await getNegociosWithOrders());
 });
 app.use("/orders", authMiddleware, ordersRouter);
 

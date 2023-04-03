@@ -5,6 +5,7 @@ import {
   deleteOrder,
   entregarPedido,
   getAvailableOrdersByIdNegocio,
+  getNegociosWithOrders,
   getOrdersById,
   getOrdersByIdCadete,
   getOrdersByIdNegocio,
@@ -64,7 +65,6 @@ ordersRouter.get("/prices", (req, res, next) => {
 ordersRouter.post("/", async (req, res, next) => {
   try {
     const data = await postOrder(req.body);
-    await incUser(req.body.negocio._id, { availableOrders: 1 });
     return res.json(data);
   } catch (error) {
     next(error);
@@ -82,7 +82,8 @@ ordersRouter.get("/negocio/:idNegocio", async (req, res, next) => {
 
 ordersRouter.get("/negocio", async (req, res, next) => {
   try {
-    const data = await getNegocios();
+    console.log("buenas");
+    const data = await getNegociosWithOrders();
     return res.json(data);
   } catch (error) {
     next(error);
@@ -110,6 +111,7 @@ ordersRouter.get("/cadete/negocio/:idNegocio", async (req, res, next) => {
 ordersRouter.get("/:idOrder", async (req, res, next) => {
   try {
     const data = await getOrdersById(req.params.idOrder);
+    console.log(data._id);
     return res.json(data);
   } catch (error) {
     next(error);
@@ -143,7 +145,6 @@ ordersRouter.put("/:idOrder/state/:state", async (req, res, next) => {
       ABONADO: abonarPedido,
       ENTREGADO: entregarPedido,
     };
-    console.log(req.user);
     res.json(
       await functions[req.params.state](req.params.idOrder, req.user._id)
     );

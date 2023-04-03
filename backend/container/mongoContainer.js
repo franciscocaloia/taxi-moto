@@ -49,4 +49,8 @@ export class MongoContainer {
     );
     return result;
   }
+  async count(filter) {
+    const result = await this.collection.countDocuments(filter);
+    return result;
+  }
 }
