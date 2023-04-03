@@ -20,8 +20,8 @@ export class MongoContainer {
     return object && { ...object, _id: object._id.toString() };
   }
 
-  async getManyByFilter(filter) {
-    const array = await this.collection.find(filter).toArray();
+  async getManyByFilter(filter, sort = {}) {
+    const array = await this.collection.find(filter).sort(sort).toArray();
     return array.map((element) => ({
       ...element,
       _id: element._id.toString(),
@@ -50,7 +50,7 @@ export class MongoContainer {
     return result;
   }
   async count(filter) {
-    const result = await this.collection.countDocuments(filter);
+    const result = await this.collection.countDocuments();
     return result;
   }
 }

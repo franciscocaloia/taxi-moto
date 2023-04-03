@@ -8,26 +8,31 @@ const ordersContainer = new MongoContainer(ordersCollection);
 
 export async function getOrdersByIdNegocio(idNegocio) {
   const query = { "negocio._id": idNegocio };
-  return await ordersContainer.getManyByFilter(query);
+  return await ordersContainer.getManyByFilter(query, { orderDate: 1 });
 }
 export async function getAvailableOrdersByIdNegocio(idNegocio) {
   const query = {
     $and: [{ "negocio._id": idNegocio }, { "state.TOMADO": false }],
   };
-  return await ordersContainer.getManyByFilter(query);
+  return await ordersContainer.getManyByFilter(query, { orderDate: 1 });
 }
 
 export async function getOrdersByIdCadete(idCadete) {
   const query = { "cadete._id": idCadete };
-  const asignedOrders = await ordersContainer.getManyByFilter(query);
+  const asignedOrders = await ordersContainer.getManyByFilter(query, {
+    orderDate: -1,
+  });
   return asignedOrders;
 }
 
 export async function getNegociosWithOrders() {
   const negocios = await getNegocios();
-  const allOrders = await ordersContainer.getManyByFilter({
-    "state.TOMADO": false,
-  });
+  const allOrders = await ordersContainer.getManyByFilter(
+    {
+      "state.TOMADO": false,
+    },
+    { orderDate: 1 }
+  );
   const sortedOrders = allOrders.reduce((acc, current) => {
     if (acc[current.negocio._id]) {
       acc[current.negocio._id]++;

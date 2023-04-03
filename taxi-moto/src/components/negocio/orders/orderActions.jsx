@@ -1,10 +1,10 @@
 import React from "react";
-import { Link, useSubmit } from "react-router-dom";
+import { Link, useNavigation, useSubmit } from "react-router-dom";
 import Swal from "sweetalert2";
 
 export const OrderActions = ({ order }) => {
   const submit = useSubmit();
-
+  const navigation = useNavigation();
   function onClick(event) {
     Swal.fire({
       title: `Desea confirmar el estado del pedido [${event.target.value}]?`,
@@ -33,24 +33,6 @@ export const OrderActions = ({ order }) => {
         />
       ) : (
         <div className="flex flex-1 flex-col justify-between gap-1">
-          {!order.state.RETIRADO && (
-            <button
-              value="RETIRADO"
-              className="btn btn-primary w-full"
-              onClick={onClick}
-            >
-              Pedido retirado
-            </button>
-          )}
-          {!order.state.ABONADO && (
-            <button
-              value="ABONADO"
-              className="btn btn-primary w-full"
-              onClick={onClick}
-            >
-              Pedido abonado
-            </button>
-          )}
           <Link
             state={order}
             to={`/negocio/editarpedido/${order._id}`}

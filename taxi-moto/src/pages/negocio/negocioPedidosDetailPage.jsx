@@ -1,12 +1,8 @@
 import React, { useEffect } from "react";
-import { redirect, useActionData, useLoaderData } from "react-router-dom";
+import { useActionData, useLoaderData } from "react-router-dom";
 import { toast } from "react-toastify";
 import { OrderDetail } from "../../components/negocio/orders/orderDetail";
-import {
-  fetchData,
-  submitData,
-  submitDataWithErrorReturn,
-} from "../../utils/fetch";
+import { fetchData, submitDataWithErrorReturn } from "../../utils/fetch";
 
 export const NegocioPedidosDetailPage = () => {
   const order = useLoaderData();

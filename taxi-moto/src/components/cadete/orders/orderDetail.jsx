@@ -25,6 +25,9 @@ export const OrderDetail = ({ order }) => {
             {order.direction}
           </h2>
           <h3>Contacto: {order.phone}</h3>
+          <h3>
+            Horario: {order.date === "" ? "Entrega Inmediata" : order.date}
+          </h3>
           <div className="flex gap-3">
             <table className="table table-compact w-full">
               <tbody>

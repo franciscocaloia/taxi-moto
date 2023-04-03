@@ -44,6 +44,7 @@ export async function action({ request, params }) {
       ...pricing,
     },
     route,
+    orderDate: Date.now(),
   };
   return submitData(
     "/orders",

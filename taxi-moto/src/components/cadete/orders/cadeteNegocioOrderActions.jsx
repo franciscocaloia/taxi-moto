@@ -1,11 +1,12 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { useSubmit } from "react-router-dom";
+import { useNavigation, useSubmit } from "react-router-dom";
 import Swal from "sweetalert2";
 import loadingIcon from "../../../assets/loadingIcon.svg";
 
 export const CadeteNegocioOrderActions = ({ order }) => {
   const submit = useSubmit();
+  const navigation = useNavigation();
   const user = useSelector((state) => state.auth);
   function onClick(event) {
     Swal.fire({

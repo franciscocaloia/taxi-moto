@@ -14,7 +14,7 @@ export const mapInputSlice = createSlice({
   initialState,
   reducers: {
     reset(state) {
-      state = initialState;
+      return initialState;
     },
     setRoute(state, action) {
       state.route = action.payload;

@@ -35,6 +35,24 @@ export const CadeteOrderActions = ({ order }) => {
         />
       ) : (
         <div className="flex flex-1 flex-col justify-between gap-1">
+          {!order.state.RETIRADO && (
+            <button
+              value="RETIRADO"
+              className="btn btn-primary w-full"
+              onClick={onClick}
+            >
+              Pedido retirado
+            </button>
+          )}
+          {!order.state.ABONADO && (
+            <button
+              value="ABONADO"
+              className="btn btn-primary w-full"
+              onClick={onClick}
+            >
+              Pedido abonado
+            </button>
+          )}
           {!order.state.ENTREGADO && (
             <button
               value="ENTREGADO"

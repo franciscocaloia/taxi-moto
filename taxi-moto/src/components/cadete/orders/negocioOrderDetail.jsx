@@ -1,9 +1,9 @@
 import React from "react";
-import { useNavigation } from "react-router-dom";
 import { isCompletedOrder } from "../../../utils/validation";
 import { Map } from "../../map/map";
 import { Routing } from "../../map/routing";
 import { CadeteNegocioOrderActions } from "./cadeteNegocioOrderActions";
+import { NegocioCard } from "../../negocio/negocioCard";
 
 export const NegocioOrderDetail = ({ order }) => {
   let totalAmount = 0;
@@ -22,6 +22,9 @@ export const NegocioOrderDetail = ({ order }) => {
           <h2 className="card-title capitalize border-b-2 border-b-base-200">
             {order.direction}
           </h2>
+          <h3>
+            Horario: {order.date === "" ? "Entrega Inmediata" : order.date}
+          </h3>
           <table className="table table-compact w-full">
             <tbody>
               <tr>
@@ -34,6 +37,7 @@ export const NegocioOrderDetail = ({ order }) => {
               </tr>
             </tbody>
           </table>
+          <NegocioCard negocio={order.negocio} />
           {!isCompletedOrder(order) && (
             <CadeteNegocioOrderActions order={order} />
           )}

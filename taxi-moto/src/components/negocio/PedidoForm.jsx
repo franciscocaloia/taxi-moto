@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
   Form,
-  redirect,
   useActionData,
   useNavigate,
   useNavigation,
@@ -27,6 +26,8 @@ export const PedidoForm = ({ order }) => {
   useEffect(() => {
     if (order) {
       dispatch(mapInputActions.setMapCoords(order.route.to));
+    } else {
+      dispatch(mapInputActions.reset());
     }
     if (error?.data) {
       toast.error("Error: " + error.data.message);
