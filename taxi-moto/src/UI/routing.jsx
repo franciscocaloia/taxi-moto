@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import L, { routing } from "leaflet";
+import { useEffect } from "react";
+import L from "leaflet";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet-routing-machine";
 import "leaflet-control-geocoder";
@@ -7,7 +7,9 @@ import "leaflet-control-geocoder/dist/Control.Geocoder.css";
 import { useMap, useMapEvents } from "react-leaflet";
 import { useDispatch, useSelector } from "react-redux";
 import { mapInputActions } from "../store/mapInputSlice";
-
+import { Icon } from "leaflet";
+import markerIconPng from "leaflet/dist/images/marker-icon.png";
+import markerIconRedPng from "leaflet/dist/images/marker-icon-red.png";
 export default function Routing() {
   const map = useMap();
   const dispatch = useDispatch();
@@ -25,6 +27,27 @@ export default function Routing() {
     const routingControl = L.Routing.control({
       waypoints: [L.latLng(location), L.latLng(mapCoords)],
       routeWhileDragging: false,
+      createMarker: function (i, wp, nWps) {
+        if (i === 0) {
+          // here change the starting and ending icons
+          return L.marker(wp.latLng, {
+            icon: new Icon({
+              iconUrl: markerIconRedPng,
+              iconSize: [25, 41],
+              iconAnchor: [12, 41],
+            }), // here pass the custom marker icon instance
+          });
+        } else {
+          // here change all the others
+          return L.marker(wp.latLng, {
+            icon: new Icon({
+              iconUrl: markerIconPng,
+              iconSize: [25, 41],
+              iconAnchor: [12, 41],
+            }),
+          });
+        }
+      },
     }).addTo(map);
     routingControl.hide();
     routingControl.on("routesfound", (event) => {

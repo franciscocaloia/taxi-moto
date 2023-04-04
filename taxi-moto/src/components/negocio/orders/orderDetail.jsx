@@ -23,6 +23,9 @@ export const OrderDetail = ({ order }) => {
           <h2 className="card-title capitalize border-b-2 border-b-base-200">
             {order.direction}
           </h2>
+          <h3>
+            Horario: {order.date === "" ? "Entrega Inmediata" : order.date}
+          </h3>
           <div className="flex gap-3">
             <table className="table table-compact w-full">
               <tbody>

@@ -1,11 +1,19 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useLoaderData } from "react-router-dom";
 import { OrdersList } from "../../components/negocio/orders/ordersList";
 import { fetchData } from "../../utils/fetch";
 import { isCompletedOrder } from "../../utils/validation";
+import useInput from "../../hooks/useInput";
 
 export const NegocioPedidosPage = () => {
   const data = useLoaderData();
+  const today = new Date();
+  const [date, setDate] = useState(
+    `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`
+  );
+  function dateChangeHandler(event) {
+    setDate(event.target.value);
+  }
   const sortedOrders = useMemo(
     () =>
       data.reduce(
@@ -24,6 +32,21 @@ export const NegocioPedidosPage = () => {
       ),
     [data]
   );
+
+  const filteredCompletedOrders = useMemo(() => {
+    const filterDate = new Date(date).toLocaleDateString("es-AR", {
+      timeZone: "ART",
+    });
+    return sortedOrders.completed.filter((order) => {
+      const orderDate = new Date(order.orderDate);
+      orderDate.setHours(orderDate.getHours() - 6);
+      return (
+        orderDate.toLocaleDateString("es-AR", {
+          // timeZone: "ART",
+        }) === filterDate
+      );
+    });
+  }, [date]);
   return (
     <div className="w-5/6 mx-auto lg:w-4/5">
       <h2 className="card-title capitalize border-b-2 border-b-base-200">
@@ -52,7 +75,8 @@ export const NegocioPedidosPage = () => {
       <h2 className="card-title capitalize border-b-2 border-b-base-200">
         Pedidos completados
       </h2>
-      <OrdersList orders={sortedOrders.completed} />
+      <input type="date" onChange={dateChangeHandler} value={date}></input>
+      <OrdersList orders={filteredCompletedOrders} />
     </div>
   );
 };

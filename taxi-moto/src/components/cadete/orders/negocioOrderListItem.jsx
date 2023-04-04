@@ -18,7 +18,17 @@ export const NegocioOrderListItem = ({ order }) => {
             <p className="pl-4">Total: ${totalAmount}</p>
             <p className="pl-4">Ganancia: ${order.totalAmount.shipment}</p>
             <p className="pl-4">
-              Horario: {order.date === "" ? "Entrega Inmediata" : order.date}
+              Horario de entrega:{" "}
+              {order.date === "" ? "Entrega Inmediata" : order.date}
+            </p>
+            <p className="pl-4">
+              Horario de alta:{" "}
+              {new Date(order.orderDate).toLocaleString("es-AR", {
+                month: "long",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+              })}
             </p>
           </div>
         </div>

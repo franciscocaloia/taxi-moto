@@ -5,13 +5,28 @@ import "leaflet/dist/leaflet.css";
 import Routing from "../../UI/routing";
 import { useSelector } from "react-redux";
 import { Map } from "../map/map";
+import { Icon } from "leaflet";
+import markerIconRedPng from "leaflet/dist/images/marker-icon-red.png";
 export const MapInputForm = () => {
-  const user = useSelector((state) => state.auth);
+  const { auth: user, mapInput } = useSelector((state) => state);
+
   return (
     <>
       {user && (
         <Map bounds={[user.location]}>
-          <Marker draggable="false" position={user.location} />
+          {!mapInput.mapCoords && (
+            <Marker
+              draggable="false"
+              position={user.location}
+              icon={
+                new Icon({
+                  iconUrl: markerIconRedPng,
+                  iconSize: [25, 41],
+                  iconAnchor: [12, 41],
+                })
+              }
+            />
+          )}
           <Routing location={user.location} />
         </Map>
       )}
