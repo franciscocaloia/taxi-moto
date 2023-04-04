@@ -6,7 +6,7 @@ import Routing from "../../UI/routing";
 import { useSelector } from "react-redux";
 import { Map } from "../map/map";
 import { Icon } from "leaflet";
-import markerIconRedPng from "leaflet/dist/images/marker-icon-red.png";
+import markerIconRedPng from "../../assets/marker-icon-red.png";
 export const MapInputForm = () => {
   const { auth: user, mapInput } = useSelector((state) => state);
 

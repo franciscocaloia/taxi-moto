@@ -6,7 +6,7 @@ import "leaflet-control-geocoder";
 import "leaflet-control-geocoder/dist/Control.Geocoder.css";
 import { useMap } from "react-leaflet";
 import markerIconPng from "leaflet/dist/images/marker-icon.png";
-import markerIconRedPng from "leaflet/dist/images/marker-icon-red.png";
+import markerIconRedPng from "../../assets/marker-icon-red.png";
 export const Routing = ({ route }) => {
   const map = useMap();
   useEffect(() => {

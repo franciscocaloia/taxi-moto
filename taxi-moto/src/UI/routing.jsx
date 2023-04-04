@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { mapInputActions } from "../store/mapInputSlice";
 import { Icon } from "leaflet";
 import markerIconPng from "leaflet/dist/images/marker-icon.png";
-import markerIconRedPng from "leaflet/dist/images/marker-icon-red.png";
+import markerIconRedPng from "../assets/marker-icon-red.png";
 export default function Routing() {
   const map = useMap();
   const dispatch = useDispatch();
