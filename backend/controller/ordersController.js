@@ -44,7 +44,6 @@ export async function getNegociosWithOrders() {
   negocios.forEach((negocio) => {
     negocio.availableOrders = sortedOrders[negocio._id] ?? 0;
   });
-  console.log(negocios);
   return negocios;
 }
 
