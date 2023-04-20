@@ -56,11 +56,7 @@ export const NegocioPedidosPage = () => {
         <OrdersList orders={sortedOrders.pending} />
       ) : (
         <>
-          <div
-            className="card max-w-xs bg-base-100 p-6 m-6 shadow-xl"
-            to="/negocio/nuevopedido"
-            relative="path"
-          >
+          <div className="card max-w-xs bg-base-100 p-6 m-6 shadow-xl">
             <p>No tienes pedidos registrados</p>
             <Link
               className="btn btn-primary"
