@@ -9,10 +9,10 @@ import { ordersRouter } from "./router/ordersRouter.js";
 import { Server as IOServer } from "socket.io";
 import { Server as HTTPServer } from "http";
 import { getNegociosWithOrders } from "./controller/ordersController.js";
-
+import cors from "cors";
 const app = express();
 app.use(express.json());
-
+app.use(cors());
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET,POST,PATCH,DELETE,PUT");
@@ -57,8 +57,17 @@ app.use((error, req, res, next) => {
 // });
 
 const httpServer = new HTTPServer(app);
-const io = new IOServer(httpServer);
+const io = new IOServer(httpServer, {
+  cors: { origin: "*" },
+});
 app.io = io;
+io.on("connection", (socket) => {
+  console.log("a user connected");
+  socket.on("world", (socket) => {
+    console.log("ahre");
+  });
+});
+
 httpServer.listen(8080, () => {
   console.log("Listening on port" + httpServer.address().port);
 });

@@ -1,3 +1,4 @@
+import { isCompletedOrder } from "../../taxi-moto/src/utils/validation.js";
 import { client } from "../cfg/mongodb.js";
 import { MongoContainer } from "../container/mongoContainer.js";
 import { UnprocessableError } from "../util/error.js";
@@ -74,9 +75,6 @@ export async function putOrder(idOrder, update) {
 
 export async function cancelarPedido(idOrder) {
   const order = await ordersContainer.getById(idOrder);
-  if (order.cadete) {
-    throw new UnprocessableError("El pedido ya tiene un cadete asignado");
-  }
 }
 
 export async function tomarPedido(idOrder, idCadete) {

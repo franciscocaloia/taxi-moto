@@ -53,6 +53,9 @@ import {
 import { socket } from "./socket.js";
 import { useEffect } from "react";
 function App() {
+  socket.on("orderCancelled", (order) => {
+    console.log("Orden cancelada: " + order.direction);
+  });
   const router = createBrowserRouter([
     {
       path: "/",
