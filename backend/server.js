@@ -61,12 +61,7 @@ const io = new IOServer(httpServer, {
   cors: { origin: "*" },
 });
 app.io = io;
-io.on("connection", (socket) => {
-  console.log("a user connected");
-  socket.on("world", (socket) => {
-    console.log("ahre");
-  });
-});
+io.on("connection", (socket) => {});
 
 httpServer.listen(8080, () => {
   console.log("Listening on port" + httpServer.address().port);

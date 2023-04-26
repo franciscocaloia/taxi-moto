@@ -51,11 +51,8 @@ import {
   action as cadetePedidoDetailAction,
 } from "./pages/cadete/cadetePedidosDetailPage";
 import { socket } from "./socket.js";
-import { useEffect } from "react";
 function App() {
-  socket.on("orderCancelled", (order) => {
-    console.log("Orden cancelada: " + order.direction);
-  });
+  socket.on("orderCancelled", (order) => {});
   const router = createBrowserRouter([
     {
       path: "/",
