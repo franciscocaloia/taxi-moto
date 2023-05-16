@@ -17,16 +17,21 @@ export const CadetePedidosPage = () => {
     () =>
       orders.reduce(
         (acc, curr) => {
-          if (isCompletedOrder(curr)) {
-            acc.completed.push(curr);
+          if (curr.canceled) {
+            acc.canceled.push(curr);
           } else {
-            acc.pending.push(curr);
+            if (isCompletedOrder(curr)) {
+              acc.completed.push(curr);
+            } else {
+              acc.pending.push(curr);
+            }
           }
           return acc;
         },
         {
           pending: [],
           completed: [],
+          canceled: [],
         }
       ),
     [orders]

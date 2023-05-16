@@ -75,6 +75,14 @@ export async function putOrder(idOrder, update) {
 
 export async function cancelarPedido(idOrder) {
   const order = await ordersContainer.getById(idOrder);
+  if (isCompletedOrder(order))
+    throw new UnprocessableError("El pedido ya fue entregado");
+  return await ordersContainer.update(idOrder, {
+    $set: { canceled: true, notified: false },
+  });
+}
+export async function notificarPedido(idOrder) {
+  return await ordersContainer.update(idOrder, { $set: { notified: true } });
 }
 
 export async function tomarPedido(idOrder, idCadete) {

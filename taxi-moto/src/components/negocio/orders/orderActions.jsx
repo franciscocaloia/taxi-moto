@@ -1,11 +1,11 @@
 import React from "react";
 import { Link, useNavigation, useSubmit } from "react-router-dom";
 import Swal from "sweetalert2";
+import { socket } from "../../../socket";
 
 export const OrderActions = ({ order }) => {
-  const submit = useSubmit();
   const navigation = useNavigation();
-  function onClick(event) {
+  function onCancel(event) {
     Swal.fire({
       title: `Desea confirmar el estado del pedido [${event.target.value}]?`,
       icon: "question",
@@ -15,11 +15,7 @@ export const OrderActions = ({ order }) => {
       confirmButtonText: "Si",
     }).then((result) => {
       if (result.isConfirmed) {
-        const formData = new FormData();
-        formData.append("state", event.target.value);
-        submit(formData, {
-          method: "put",
-        });
+        socket.emit("orderCanceled", order._id);
       }
     });
   }
@@ -40,7 +36,9 @@ export const OrderActions = ({ order }) => {
           >
             Editar pedido
           </Link>
-          <button className="btn btn-error  w-full ">Cancelar pedido</button>
+          <button onClick={onCancel} className="btn btn-error  w-full">
+            Cancelar pedido
+          </button>
         </div>
       )}
     </>

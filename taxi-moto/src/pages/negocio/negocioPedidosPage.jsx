@@ -16,21 +16,26 @@ export const NegocioPedidosPage = () => {
   }
   const sortedOrders = useMemo(
     () =>
-      data.reduce(
+      orders.reduce(
         (acc, curr) => {
-          if (isCompletedOrder(curr)) {
-            acc.completed.push(curr);
+          if (curr.canceled) {
+            acc.canceled.push(curr);
           } else {
-            acc.pending.push(curr);
+            if (isCompletedOrder(curr)) {
+              acc.completed.push(curr);
+            } else {
+              acc.pending.push(curr);
+            }
           }
           return acc;
         },
         {
           pending: [],
           completed: [],
+          canceled: [],
         }
       ),
-    [data]
+    [orders]
   );
 
   const filteredCompletedOrders = useMemo(() => {

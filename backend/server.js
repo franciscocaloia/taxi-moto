@@ -8,8 +8,15 @@ import { authMiddleware, authRouter } from "./router/authRouter.js";
 import { ordersRouter } from "./router/ordersRouter.js";
 import { Server as IOServer } from "socket.io";
 import { Server as HTTPServer } from "http";
-import { getNegociosWithOrders } from "./controller/ordersController.js";
+import {
+  cancelarPedido,
+  getNegociosWithOrders,
+  getOrdersById,
+  getOrdersByIdCadete,
+  notificarPedido,
+} from "./controller/ordersController.js";
 import cors from "cors";
+import { isCompletedOrder } from "./util/validation.js";
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -52,16 +59,37 @@ app.use((error, req, res, next) => {
   res.status(status).json({ data: { message: message } });
 });
 
-// app.listen(8080, () => {
-//   console.log("Listening on port");
-// });
-
 const httpServer = new HTTPServer(app);
 const io = new IOServer(httpServer, {
   cors: { origin: "*" },
 });
 app.io = io;
-io.on("connection", (socket) => {});
+io.on("connection", (socket) => {
+  socket.on("cadeteConnection", async (idCadete) => {
+    const orders = await getOrdersByIdCadete(idCadete);
+    orders.forEach((order) => {
+      if (!isCompletedOrder(order)) {
+        if (!order.canceled) {
+          socket.join(order._id);
+        } else if (!order.notified) {
+          socket.emit("orderCanceled", order);
+        }
+      }
+    });
+  });
+  socket.on("orderCanceledNotified", async (id) => {
+    await notificarPedido(id);
+  });
+  socket.on("orderCanceled", async (id) => {
+    try {
+      const order = await getOrdersById(id);
+      await cancelarPedido(id);
+      socket.to(id).emit("orderCanceled", order);
+    } catch (error) {
+      socket.emit("orderCanceledError", error);
+    }
+  });
+});
 
 httpServer.listen(8080, () => {
   console.log("Listening on port" + httpServer.address().port);

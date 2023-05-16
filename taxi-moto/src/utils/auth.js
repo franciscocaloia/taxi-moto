@@ -1,4 +1,5 @@
 import { json, redirect } from "react-router-dom";
+import { fetchData } from "./fetch";
 
 export async function checkAuthLoader({ request, params }) {
   const token = localStorage.getItem("token");
