@@ -6,7 +6,7 @@ import { isCompletedOrder } from "../../utils/validation";
 import useInput from "../../hooks/useInput";
 
 export const NegocioPedidosPage = () => {
-  const data = useLoaderData();
+  const orders = useLoaderData();
   const today = new Date();
   const [date, setDate] = useState(
     `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`
