@@ -51,7 +51,6 @@ import {
   action as cadetePedidoDetailAction,
 } from "./pages/cadete/cadetePedidosDetailPage";
 import { loader as cadeteLayoutLoader } from "./layout/cadeteLayout";
-import { socket } from "./socket.js";
 function App() {
   const router = createBrowserRouter([
     {
