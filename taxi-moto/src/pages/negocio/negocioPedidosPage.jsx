@@ -3,7 +3,6 @@ import { Link, useLoaderData } from "react-router-dom";
 import { OrdersList } from "../../components/negocio/orders/ordersList";
 import { fetchData } from "../../utils/fetch";
 import { isCompletedOrder } from "../../utils/validation";
-import useInput from "../../hooks/useInput";
 
 export const NegocioPedidosPage = () => {
   const orders = useLoaderData();

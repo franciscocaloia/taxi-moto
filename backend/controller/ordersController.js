@@ -13,7 +13,11 @@ export async function getOrdersByIdNegocio(idNegocio) {
 }
 export async function getAvailableOrdersByIdNegocio(idNegocio) {
   const query = {
-    $and: [{ "negocio._id": idNegocio }, { "state.TOMADO": false }],
+    $and: [
+      { "negocio._id": idNegocio },
+      { "state.TOMADO": false },
+      { canceled: { $exists: false } },
+    ],
   };
   return await ordersContainer.getManyByFilter(query, { orderDate: 1 });
 }
@@ -30,7 +34,7 @@ export async function getNegociosWithOrders() {
   const negocios = await getNegocios();
   const allOrders = await ordersContainer.getManyByFilter(
     {
-      "state.TOMADO": false,
+      $and: [{ "state.TOMADO": false }, { canceled: { $exists: false } }],
     },
     { orderDate: 1 }
   );

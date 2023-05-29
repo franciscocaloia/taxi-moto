@@ -143,9 +143,20 @@ ordersRouter.put("/:idOrder/state/:state", async (req, res, next) => {
       ABONADO: abonarPedido,
       ENTREGADO: entregarPedido,
     };
-    res.json(
-      await functions[req.params.state](req.params.idOrder, req.user._id)
-    );
+    switch (req.params.state) {
+      case "TOMADO":
+        res.json(await tomarPedido(req.params.idOrder, req.user._id));
+        break;
+      case "RETIRADO":
+        res.json(await retirarPedido(req.params.idOrder));
+        break;
+      case "ABONADO":
+        res.json(await abonarPedido(req.params.idOrder));
+        break;
+      case "ENTREGADO":
+        res.json(await entregarPedido(req.params.idOrder));
+        break;
+    }
   } catch (error) {
     console.log(error);
     next(error);
