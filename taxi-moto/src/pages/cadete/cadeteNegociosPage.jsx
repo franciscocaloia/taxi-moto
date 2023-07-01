@@ -19,5 +19,5 @@ export const CadeteNegociosPage = () => {
 };
 
 export async function loader() {
-  return fetchData("/negocios");
+  return fetchData("/orders/negociowithorders");
 }

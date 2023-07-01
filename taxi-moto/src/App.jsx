@@ -31,8 +31,10 @@ import {
   loader as negocioPedidosLoader,
   NegocioPedidosPage,
 } from "./pages/negocio/negocioPedidosPage";
-
-import { checkAuthLoader, logoutAction } from "./utils/auth.js";
+import { loader as adminLayoutLoader } from "./layout/adminLayout";
+import { loader as negocioLayoutLoader } from "./layout/negocioLayout";
+import { loader as cadeteLayoutLoader } from "./layout/cadeteLayout";
+import { Layout as AuthLayout, logoutAction } from "./utils/auth.jsx";
 import {
   CadeteInfoPage,
   action as cadeteInfoAction,
@@ -50,13 +52,14 @@ import {
   CadetePedidosDetailPage,
   action as cadetePedidoDetailAction,
 } from "./pages/cadete/cadetePedidosDetailPage";
-import { loader as cadeteLayoutLoader } from "./layout/cadeteLayout";
+import { cadeteRouting } from "./routing/cadeteRouting";
+import { negocioRouting } from "./routing/negocioRouting";
+import { adminRouting } from "./routing/adminRouting";
+
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      loader: checkAuthLoader,
-      shouldRevalidate: () => {},
       element: <Layout />,
       errorElement: <ErrorPage />,
       children: [
@@ -69,103 +72,12 @@ function App() {
           path: "logout",
           action: logoutAction,
         },
-        {
-          children: [
-            {
-              path: "/negocio",
-              children: [
-                {
-                  index: true,
-                  element: <NegocioPage />,
-                },
-                {
-                  path: "nuevopedido",
-                  action: nuevoPedidoAction,
-                  element: <NegocioNuevoPedidoPage />,
-                },
-                {
-                  path: "editarpedido/:idPedido",
-                  action: editarPedidoAction,
-                  loader: editarPedidoLoader,
-                  element: <NegocioEditarPedidoPage />,
-                },
-                {
-                  path: ":idNegocio/editarEstadopedido/:idPedido",
-                  action: editarEstadoPedidoAction,
-                },
-                {
-                  path: ":idNegocio/info",
-                  element: <NegocioInformacionPage />,
-                },
-                {
-                  path: ":idNegocio/pedidos",
-                  element: <NegocioPedidosPage />,
-                  loader: negocioPedidosLoader,
-                },
-                {
-                  path: ":idNegocio/pedidos/:idPedido",
-                  loader: negocioPedidosDetailLoader,
-                  action: editarEstadoPedidoAction,
-                  element: <NegocioPedidosDetailPage />,
-                },
-              ],
-            },
-            {
-              path: "/cadete",
-              children: [
-                {
-                  index: true,
-                  element: <CadetePage />,
-                },
-                {
-                  path: ":idCadete",
-                  loader: cadeteLayoutLoader,
-                  children: [
-                    {
-                      path: "pedidos",
-                      loader: cadetePedidosLoader,
-                      element: <CadetePedidosPage />,
-                    },
-                    {
-                      path: "pedidos/:idPedido",
-                      loader: cadetePedidosDetailLoader,
-                      action: cadetePedidoDetailAction,
-                      element: <CadetePedidosDetailPage />,
-                    },
-                    {
-                      path: "negocios",
-                      loader: cadeteNegociosLoader,
-                      element: <CadeteNegociosPage />,
-                    },
-                    {
-                      path: "negocios/:idNegocio/pedidos",
-                      loader: cadeteNegociosPedidosLoader,
-                      element: <CadeteNegociosPedidosPage />,
-                    },
-                    {
-                      path: "negocios/:idNegocio/pedidos/:idPedido",
-                      loader: cadetePedidosDetailLoader,
-                      action: cadeteNegociosPedidosDetailAction,
-                      element: <CadeteNegociosPedidosDetailPage />,
-                    },
-                    {
-                      path: "editarPedido/:idPedido",
-                    },
-                    {
-                      path: "info",
-                      action: cadeteInfoAction,
-                      element: <CadeteInfoPage />,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
+        negocioRouting,
+        cadeteRouting,
+        adminRouting,
       ],
     },
   ]);
-
   return <RouterProvider router={router} />;
 }
 

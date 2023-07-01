@@ -12,6 +12,7 @@ export class MongoContainer {
     }));
   }
   async getById(id) {
+    console.log(id);
     const object = await this.collection.findOne({ _id: new ObjectId(id) });
     return object && { ...object, _id: object._id.toString() };
   }

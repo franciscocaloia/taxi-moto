@@ -47,13 +47,22 @@ app.put("/user/:idUser", authMiddleware, async (req, res, next) => {
     next(error);
   }
 });
+app.get("/negocio", async (req, res, next) => {
+  try {
+    const data = await getNegocios();
+    return res.json(data);
+  } catch (error) {
+    next(error);
+  }
+});
 
-app.get("/negocios", authMiddleware, async (req, res) => {
+app.get("/negociowithorders", authMiddleware, async (req, res) => {
   return res.json(await getNegociosWithOrders());
 });
 app.use("/orders", authMiddleware, ordersRouter);
 
 app.use((error, req, res, next) => {
+  console.log(error);
   const status = error.status || 500;
   const message = error.message || "Something went wrong.";
   res.status(status).json({ data: { message: message } });

@@ -37,6 +37,17 @@ function getCategories(type, id) {
           url: `/negocio/${id}/info`,
         },
       ];
+    case "admin":
+      return [
+        {
+          content: "Negocios",
+          url: `/admin/negocio`,
+        },
+        {
+          content: "Cadetes",
+          url: `/admin/cadete`,
+        },
+      ];
     default:
       return [];
   }

@@ -20,19 +20,19 @@ export const ordersRouter = Router();
 ordersRouter.get("/prices", (req, res, next) => {
   return res.status(200).json({
     0: {
-      shipment: 240,
-      additional: 20,
+      shipment: 280,
+      additional: 40,
     },
     2000: {
-      shipment: 0,
-      additional: 20,
+      shipment: 20,
+      additional: 0,
     },
     2500: {
       shipment: 40,
       additional: 0,
     },
     3000: {
-      shipment: 20,
+      shipment: 40,
       additional: 0,
     },
     3500: {
@@ -40,12 +40,12 @@ ordersRouter.get("/prices", (req, res, next) => {
       additional: 0,
     },
     4000: {
-      shipment: 20,
-      additional: 20,
+      shipment: 40,
+      additional: 10,
     },
     4500: {
       shipment: 40,
-      additional: 0,
+      additional: 10,
     },
     5000: {
       shipment: 40,
@@ -57,7 +57,7 @@ ordersRouter.get("/prices", (req, res, next) => {
     },
     6000: {
       shipment: 40,
-      additional: 20,
+      additional: 0,
     },
   });
 });
@@ -80,7 +80,7 @@ ordersRouter.get("/negocio/:idNegocio", async (req, res, next) => {
   }
 });
 
-ordersRouter.get("/negocio", async (req, res, next) => {
+ordersRouter.get("/negociowithorders", async (req, res, next) => {
   try {
     const data = await getNegociosWithOrders();
     return res.json(data);
@@ -137,12 +137,6 @@ ordersRouter.put("/:idOrder/cancelar", async (req, res, next) => {
 
 ordersRouter.put("/:idOrder/state/:state", async (req, res, next) => {
   try {
-    const functions = {
-      TOMADO: tomarPedido,
-      RETIRADO: retirarPedido,
-      ABONADO: abonarPedido,
-      ENTREGADO: entregarPedido,
-    };
     switch (req.params.state) {
       case "TOMADO":
         res.json(await tomarPedido(req.params.idOrder, req.user._id));
