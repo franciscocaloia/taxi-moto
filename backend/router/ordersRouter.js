@@ -5,6 +5,7 @@ import {
   deleteOrder,
   entregarPedido,
   getAvailableOrdersByIdNegocio,
+  getNegocioDebt,
   getNegociosWithOrders,
   getOrdersById,
   getOrdersByIdCadete,
@@ -74,6 +75,19 @@ ordersRouter.post("/", async (req, res, next) => {
 ordersRouter.get("/negocio/:idNegocio", async (req, res, next) => {
   try {
     const data = await getOrdersByIdNegocio(req.params.idNegocio);
+    return res.json(data);
+  } catch (error) {
+    next(error);
+  }
+});
+
+ordersRouter.get("/negocio/:idNegocio/debt", async (req, res, next) => {
+  try {
+    const data = await getNegocioDebt(
+      req.params.idNegocio,
+      parseInt(req.query.initDate),
+      parseInt(req.query.finalDate)
+    );
     return res.json(data);
   } catch (error) {
     next(error);

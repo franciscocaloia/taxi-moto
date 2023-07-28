@@ -55,6 +55,14 @@ app.get("/negocio", async (req, res, next) => {
     next(error);
   }
 });
+app.get("/negocio/:idNegocio", async (req, res, next) => {
+  try {
+    const data = await getUserById(req.params.idNegocio);
+    return res.json(data);
+  } catch (error) {
+    next(error);
+  }
+});
 
 app.get("/negociowithorders", authMiddleware, async (req, res) => {
   return res.json(await getNegociosWithOrders());

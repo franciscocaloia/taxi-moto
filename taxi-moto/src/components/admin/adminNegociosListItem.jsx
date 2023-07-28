@@ -6,7 +6,7 @@ export const AdminNegocioListItem = ({ negocio }) => {
     <li className="my-3 lg:m-6">
       <Link
         className="card p-6 flex-row  items-center gap-6 bg-base-100 shadow-xl transition-all duration-200 hover:scale-105"
-        to={`${negocio._id}/pedidos`}
+        to={`${negocio._id}`}
       >
         <div className="avatar placeholder">
           <div className="bg-neutral-focus text-neutral-content w-16 xl:w-20">

@@ -6,11 +6,6 @@ import { authActions } from "../store/authSlice";
 import { useDispatch } from "react-redux";
 import { ToastContainer } from "react-toastify";
 export const Layout = () => {
-  const user = useLoaderData();
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(authActions.login(user));
-  }, [user]);
   return (
     <div className="h-screen flex flex-col">
       <Header />

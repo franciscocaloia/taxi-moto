@@ -33,7 +33,6 @@ export async function checkAuthLoader() {
 
 export const Layout = () => {
   const user = useLoaderData();
-  console.log(user);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(authActions.login(user));

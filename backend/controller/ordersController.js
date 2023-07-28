@@ -30,6 +30,22 @@ export async function getOrdersByIdCadete(idCadete) {
   return asignedOrders;
 }
 
+export async function getNegocioDebt(idNegocio, initDate, finalDate) {
+  //db.orders.aggregate([{"$match":{$and: [{ orderDate: { $gt: 1690576140000 } },{ orderDate: { $lt: 1690770540000 } },{"negocio._id":"641345786ba00a31280a29f3"}]}},{ "$group": { "_id": null, "sum": { "$sum": "$totalAmount.additional" }}}])
+  const match = {
+    $and: [
+      { orderDate: { $gt: initDate } },
+      { orderDate: { $lt: finalDate } },
+      { "negocio._id": idNegocio },
+    ],
+  };
+  const group = {
+    _id: null,
+    totalQuantity: { $sum: "$totalAmount.additional" },
+  };
+  return await ordersContainer.aggregate(match, group);
+}
+
 export async function getNegociosWithOrders() {
   const negocios = await getNegocios();
   const allOrders = await ordersContainer.getManyByFilter(

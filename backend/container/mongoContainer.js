@@ -50,6 +50,21 @@ export class MongoContainer {
     );
     return result;
   }
+
+  async aggregate(match, group) {
+    const result = await this.collection
+      .aggregate([
+        {
+          $match: match,
+        },
+        {
+          $group: group,
+        },
+      ])
+      .toArray();
+    console.log(result[0].totalQuantity);
+    return result[0].totalQuantity;
+  }
   async count(filter) {
     const result = await this.collection.countDocuments();
     return result;
