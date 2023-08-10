@@ -5,10 +5,18 @@ import {
 } from "../layout/adminNegocioLayout.jsx";
 import {
   AdminNegociosDebtPage,
-  loader as adminNegociosDebtLoader,
   action as adminNegociosDebtAction,
-} from "../pages/admin/adminNegociosDebtPage.jsx";
+} from "../pages/admin/adminNEgociosDebtPage.jsx";
+
 import { AdminNegociosDetailPage } from "../pages/admin/adminNegociosDetailPage.jsx";
+import {
+  AdminNegociosOrdersDetailPage,
+  loader as adminNegociosOrdersDetailLoader,
+} from "../pages/admin/adminNegociosOrdersDetailPage.jsx";
+import {
+  AdminNegociosOrdersPage,
+  loader as adminNegociosOrdersLoader,
+} from "../pages/admin/adminNegociosOrdersPage.jsx";
 import {
   AdminNegociosPage,
   loader as adminNegociosLoader,
@@ -34,8 +42,17 @@ export const adminRouting = {
           element: <AdminNegociosDetailPage />,
         },
         {
+          path: "orders",
+          loader: adminNegociosOrdersLoader,
+          element: <AdminNegociosOrdersPage />,
+        },
+        {
+          path: "orders/:idPedido",
+          loader: adminNegociosOrdersDetailLoader,
+          element: <AdminNegociosOrdersDetailPage />,
+        },
+        {
           path: "debt",
-          loader: adminNegociosDebtLoader,
           action: adminNegociosDebtAction,
           element: <AdminNegociosDebtPage />,
         },

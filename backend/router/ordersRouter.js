@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { getNegocios, incUser } from "../controller/authController.js";
 import {
   abonarPedido,
   deleteOrder,
@@ -13,6 +12,7 @@ import {
   postOrder,
   putOrder,
   retirarPedido,
+  setState,
   tomarPedido,
 } from "../controller/ordersController.js";
 
@@ -129,44 +129,37 @@ ordersRouter.get("/:idOrder", async (req, res, next) => {
     next(error);
   }
 });
+ordersRouter.put("/:idOrder/state/:state", async (req, res, next) => {
+  try {
+    if (req.user.type === "admin") {
+      setState(req.params.idOrder, req.params.state);
+    } else {
+      switch (req.params.state) {
+        case "TOMADO":
+          res.json(await tomarPedido(req.params.idOrder, req.user._id));
+          break;
+        case "RETIRADO":
+          res.json(await retirarPedido(req.params.idOrder));
+          break;
+        case "ABONADO":
+          res.json(await abonarPedido(req.params.idOrder));
+          break;
+        case "ENTREGADO":
+          res.json(await entregarPedido(req.params.idOrder));
+          break;
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+});
 
 ordersRouter.put("/:idOrder", async (req, res, next) => {
   try {
     const data = await putOrder(req.params.idOrder, req.body);
     return res.json(data);
   } catch (error) {
-    next(error);
-  }
-});
-
-ordersRouter.put("/:idOrder/cancelar", async (req, res, next) => {
-  try {
-    const data = await cancelOrder(req.params.idOrder);
-    req.app.io;
-    return res.json(data);
-  } catch (error) {
-    next(error);
-  }
-});
-
-ordersRouter.put("/:idOrder/state/:state", async (req, res, next) => {
-  try {
-    switch (req.params.state) {
-      case "TOMADO":
-        res.json(await tomarPedido(req.params.idOrder, req.user._id));
-        break;
-      case "RETIRADO":
-        res.json(await retirarPedido(req.params.idOrder));
-        break;
-      case "ABONADO":
-        res.json(await abonarPedido(req.params.idOrder));
-        break;
-      case "ENTREGADO":
-        res.json(await entregarPedido(req.params.idOrder));
-        break;
-    }
-  } catch (error) {
-    console.log(error);
     next(error);
   }
 });

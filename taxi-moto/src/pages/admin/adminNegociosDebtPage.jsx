@@ -10,7 +10,6 @@ import { DateFilter } from "../../components/utils/dateFilter";
 
 export const AdminNegociosDebtPage = () => {
   const data = useActionData();
-  console.log(data);
   const [initDate, setInitDate] = useState();
   const [finalDate, setFinalDate] = useState();
 
@@ -20,9 +19,6 @@ export const AdminNegociosDebtPage = () => {
   function onFinalDateChange(e) {
     setFinalDate(e.target.value);
   }
-  useEffect(() => {
-    console.log(data);
-  }, []);
   return (
     <>
       <Form className="lg:flex lg:items-center" method="post">
@@ -46,7 +42,6 @@ export const AdminNegociosDebtPage = () => {
           Consultar deuda
         </button>
       </Form>
-
       {data && <p className="m-6">El monto a cobrar es de: ${data}</p>}
     </>
   );
@@ -61,7 +56,4 @@ export async function action({ request, params }) {
       initDate
     )}&finalDate=${Date.parse(finalDate)}`
   );
-}
-export function loader({ params }) {
-  return fetchData(`/orders/negocio/${params.idNegocio}`);
 }

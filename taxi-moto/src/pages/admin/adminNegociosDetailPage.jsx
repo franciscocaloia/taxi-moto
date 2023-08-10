@@ -1,8 +1,5 @@
 import React, { useState } from "react";
-import { fetchData } from "../../utils/fetch";
-import { Link, useLoaderData } from "react-router-dom";
-import { AdminNegocioOrdersList } from "../../components/admin/adminNegociosOrdersList";
-import { DateFilter } from "../../components/utils/dateFilter";
+import { Link } from "react-router-dom";
 
 export const AdminNegociosDetailPage = () => {
   return (
@@ -13,7 +10,9 @@ export const AdminNegociosDetailPage = () => {
         </Link>
       </div>
       <div className="card max-w-xs bg-base-100 p-6 m-6 shadow-xl">
-        <Link className="btn btn-primary">Gestionar ordenes</Link>
+        <Link to="orders" className="btn btn-primary">
+          Gestionar ordenes
+        </Link>
       </div>
     </div>
   );

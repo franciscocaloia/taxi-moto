@@ -16,8 +16,8 @@ export async function loginUser(username, password) {
   const user = await usersContainer.getByFilter({ username });
   if (user) {
     if (bcrypt.compareSync(password, user.password)) {
-      const token = jwt.sign({ _id: user._id }, SECRET);
       const type = user.type;
+      const token = jwt.sign({ _id: user._id, type }, SECRET);
       return { token, type };
     } else {
       throw new NotAuthError("Contraseña incorrecta");

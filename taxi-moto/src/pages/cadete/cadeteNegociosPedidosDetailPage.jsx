@@ -8,13 +8,13 @@ export const CadeteNegociosPedidosDetailPage = () => {
   const order = useLoaderData();
   const error = useActionData();
   useEffect(() => {
-    console.log(error);
     if (error) {
       toast.error("Error: " + error.data?.message);
     }
   }, [error]);
   return <>{order && <NegocioOrderDetail order={order} />}</>;
 };
+
 export async function loader({ params }) {
   return fetchData(`/orders/${params.idPedido}`);
 }
