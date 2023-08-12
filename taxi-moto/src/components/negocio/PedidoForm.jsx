@@ -14,9 +14,11 @@ import logoSearch from "../../assets/logoSearch.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { mapInputActions } from "../../store/mapInputSlice";
 import { toast } from "react-toastify";
+
 const loader = new Loader({
   apiKey: import.meta.env.VITE_GOOGLE_API_KEY,
 });
+
 export const PedidoForm = ({ order }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();

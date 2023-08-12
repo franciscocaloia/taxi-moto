@@ -105,7 +105,11 @@ ordersRouter.get("/negociowithorders", async (req, res, next) => {
 
 ordersRouter.get("/cadete/:idCadete", async (req, res, next) => {
   try {
-    const data = await getOrdersByIdCadete(req.params.idCadete);
+    const data = await getOrdersByIdCadete(
+      req.params.idCadete,
+      parseInt(req.query.initDate),
+      parseInt(req.query.finalDate)
+    );
     return res.json(data);
   } catch (error) {
     next(error);

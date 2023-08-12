@@ -59,6 +59,9 @@ export async function getUsers() {
 export async function getNegocios() {
   return await usersContainer.getManyByFilter({ type: "negocio" });
 }
+export async function getCadetes() {
+  return await usersContainer.getManyByFilter({ type: "cadete" });
+}
 
 export async function postUser(user) {
   return await usersContainer.save(user);

@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { Link, useLoaderData } from "react-router-dom";
+import { Link, useLoaderData, useSearchParams } from "react-router-dom";
 import { fetchData } from "../../utils/fetch";
 import { OrdersList } from "../../components/cadete/orders/ordersList";
 import { isCompletedOrder } from "../../utils/validation";
@@ -7,11 +7,11 @@ import { isCompletedOrder } from "../../utils/validation";
 export const CadetePedidosPage = () => {
   const orders = useLoaderData();
   const today = new Date();
-  const [date, setDate] = useState(
-    `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`
+  let [searchParams, setSearchParams] = useSearchParams(
+    `date=${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`
   );
   function dateChangeHandler(event) {
-    setDate(event.target.value);
+    setSearchParams({ date: event.target.value });
   }
   const sortedOrders = useMemo(
     () =>
@@ -36,20 +36,20 @@ export const CadetePedidosPage = () => {
       ),
     [orders]
   );
-  const filteredCompletedOrders = useMemo(() => {
-    const filterDate = new Date(date).toLocaleDateString("es-AR", {
-      timeZone: "ART",
-    });
-    return sortedOrders.completed.filter((order) => {
-      const orderDate = new Date(order.orderDate);
-      orderDate.setHours(orderDate.getHours() - 6);
-      return (
-        orderDate.toLocaleDateString("es-AR", {
-          // timeZone: "ART",
-        }) === filterDate
-      );
-    });
-  }, [date]);
+  // const filteredCompletedOrders = useMemo(() => {
+  //   const filterDate = new Date(date).toLocaleDateString("es-AR", {
+  //     timeZone: "ART",
+  //   });
+  //   return sortedOrders.completed.filter((order) => {
+  //     const orderDate = new Date(order.orderDate);
+  //     orderDate.setHours(orderDate.getHours() - 6);
+  //     return (
+  //       orderDate.toLocaleDateString("es-AR", {
+  //         timeZone: "ART",
+  //       }) === filterDate
+  //     );
+  //   });
+  // }, [date]);
   return (
     <div className="w-5/6 mx-auto lg:w-4/5">
       <h2 className="card-title capitalize border-b-2 border-b-base-200">
@@ -67,12 +67,18 @@ export const CadetePedidosPage = () => {
       <h2 className="card-title capitalize border-b-2 border-b-base-200">
         Pedidos completados
       </h2>
-      <input type="date" onChange={dateChangeHandler} value={date}></input>
-      <OrdersList orders={filteredCompletedOrders} />
+      <input type="date" onChange={dateChangeHandler}></input>
+      <OrdersList orders={sortedOrders.completed} />
     </div>
   );
 };
 
-export async function loader({ params }) {
-  return fetchData(`/orders/cadete/${params.idCadete}`);
+export async function loader({ params, request }) {
+  const url = new URL(request.url);
+  const date = url.searchParams.get("date");
+  const initDate = Date.parse(date) + 21600000;
+  const finalDate = initDate + 86400000;
+  return fetchData(
+    `/orders/cadete/${params.idCadete}?initDate=${initDate}&finalDate=${finalDate}`
+  );
 }

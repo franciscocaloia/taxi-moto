@@ -3,6 +3,11 @@ import {
   AdminNegocioLayout,
   loader as adminNegocioLayoutLoader,
 } from "../layout/adminNegocioLayout.jsx";
+import { AdminCadetesForm } from "../pages/admin/adminCadetesForm.jsx";
+import {
+  AdminCadetesPage,
+  loader as adminCadetesLoader,
+} from "../pages/admin/adminCadetesPage.jsx";
 import {
   AdminNegociosDebtPage,
   action as adminNegociosDebtAction,
@@ -60,7 +65,13 @@ export const adminRouting = {
     },
 
     {
-      path: "cadetes",
+      path: "cadete",
+      loader: adminCadetesLoader,
+      element: <AdminCadetesPage />,
+    },
+    {
+      path: "cadete/new",
+      element: <AdminCadetesForm />,
     },
   ],
 };

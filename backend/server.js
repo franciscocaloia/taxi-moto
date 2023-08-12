@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  getCadetes,
   getNegocios,
   getUserById,
   putUser,
@@ -58,6 +59,22 @@ app.get("/negocio", async (req, res, next) => {
 app.get("/negocio/:idNegocio", async (req, res, next) => {
   try {
     const data = await getUserById(req.params.idNegocio);
+    return res.json(data);
+  } catch (error) {
+    next(error);
+  }
+});
+app.get("/cadete", async (req, res, next) => {
+  try {
+    const data = await getCadetes();
+    return res.json(data);
+  } catch (error) {
+    next(error);
+  }
+});
+app.get("/cadete/:idCadete", async (req, res, next) => {
+  try {
+    const data = await getUserById(req.params.idCadete);
     return res.json(data);
   } catch (error) {
     next(error);

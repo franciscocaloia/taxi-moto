@@ -22,11 +22,19 @@ export async function getAvailableOrdersByIdNegocio(idNegocio) {
   return await ordersContainer.getManyByFilter(query, { orderDate: 1 });
 }
 
-export async function getOrdersByIdCadete(idCadete) {
-  const query = { "cadete._id": idCadete };
+export async function getOrdersByIdCadete(idCadete, initDate, finalDate) {
+  const query = {
+    $and: [
+      { "cadete._id": idCadete },
+      { orderDate: { $gt: initDate } },
+      { orderDate: { $lt: finalDate } },
+    ],
+  };
+
   const asignedOrders = await ordersContainer.getManyByFilter(query, {
     orderDate: -1,
   });
+
   return asignedOrders;
 }
 
