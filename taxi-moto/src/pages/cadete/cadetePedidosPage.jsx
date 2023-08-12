@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useLoaderData, useSearchParams } from "react-router-dom";
 import { fetchData } from "../../utils/fetch";
 import { OrdersList } from "../../components/cadete/orders/ordersList";
@@ -7,9 +7,10 @@ import { isCompletedOrder } from "../../utils/validation";
 export const CadetePedidosPage = () => {
   const orders = useLoaderData();
   const today = new Date();
-  let [searchParams, setSearchParams] = useSearchParams(
-    `date=${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`
-  );
+  let [searchParams, setSearchParams] = useSearchParams();
+  useEffect(() => {
+    setSearchParams({ date: today.toISOString().split("T")[0] });
+  }, []);
   function dateChangeHandler(event) {
     setSearchParams({ date: event.target.value });
   }
@@ -67,7 +68,11 @@ export const CadetePedidosPage = () => {
       <h2 className="card-title capitalize border-b-2 border-b-base-200">
         Pedidos completados
       </h2>
-      <input type="date" onChange={dateChangeHandler}></input>
+      <input
+        defaultValue={today.toISOString().split("T")[0]}
+        type="date"
+        onChange={dateChangeHandler}
+      ></input>
       <OrdersList orders={sortedOrders.completed} />
     </div>
   );
