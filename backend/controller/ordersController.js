@@ -26,8 +26,8 @@ export async function getOrdersByIdCadete(idCadete, initDate, finalDate) {
   const query = {
     $and: [
       { "cadete._id": idCadete },
-      { orderDate: { $gt: initDate } },
-      { orderDate: { $lt: finalDate } },
+      // { orderDate: { $gt: initDate } },
+      // { orderDate: { $lt: finalDate } },
     ],
   };
 
@@ -42,8 +42,8 @@ export async function getNegocioDebt(idNegocio, initDate, finalDate) {
   //db.orders.aggregate([{"$match":{$and: [{ orderDate: { $gt: 1690576140000 } },{ orderDate: { $lt: 1690770540000 } },{"negocio._id":"641345786ba00a31280a29f3"}]}},{ "$group": { "_id": null, "sum": { "$sum": "$totalAmount.additional" }}}])
   const match = {
     $and: [
-      // { orderDate: { $gt: initDate } },
-      // { orderDate: { $lt: finalDate } },
+      { orderDate: { $gt: initDate } },
+      { orderDate: { $lt: finalDate } },
       { "negocio._id": idNegocio },
     ],
   };
