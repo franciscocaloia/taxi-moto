@@ -11,7 +11,7 @@ import {
 import {
   AdminNegociosDebtPage,
   action as adminNegociosDebtAction,
-} from "../pages/admin/adminNEgociosDebtPage.jsx";
+} from "../pages/admin/adminNegociosDebtPage.jsx";
 
 import { AdminNegociosDetailPage } from "../pages/admin/adminNegociosDetailPage.jsx";
 import {
