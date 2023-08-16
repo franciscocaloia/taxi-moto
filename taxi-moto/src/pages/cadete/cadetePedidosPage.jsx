@@ -9,7 +9,19 @@ export const CadetePedidosPage = () => {
   const today = new Date();
   let [searchParams, setSearchParams] = useSearchParams();
   useEffect(() => {
-    setSearchParams({ date: today.toISOString().split("T")[0] });
+    setSearchParams({
+      date: today
+        .toLocaleDateString("es-AR", {
+          timeZone: "America/Argentina/Buenos_Aires",
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          localeMatcher: "lookup",
+        })
+        .split("/")
+        .reverse()
+        .join("-"),
+    });
   }, []);
   function dateChangeHandler(event) {
     setSearchParams({ date: event.target.value });
@@ -69,7 +81,7 @@ export const CadetePedidosPage = () => {
         Pedidos completados
       </h2>
       <input
-        defaultValue={today.toISOString().split("T")[0]}
+        defaultValue={searchParams.get("date")}
         type="date"
         onChange={dateChangeHandler}
       ></input>
@@ -81,7 +93,7 @@ export const CadetePedidosPage = () => {
 export async function loader({ params, request }) {
   const url = new URL(request.url);
   const date = url.searchParams.get("date");
-  const initDate = Date.parse(date) + 21600000;
+  const initDate = Date.parse(date);
   const finalDate = initDate + 86400000;
   return fetchData(
     `/orders/cadete/${params.idCadete}?initDate=${initDate}&finalDate=${finalDate}`

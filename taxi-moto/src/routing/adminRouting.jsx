@@ -17,6 +17,7 @@ import { AdminNegociosDetailPage } from "../pages/admin/adminNegociosDetailPage.
 import {
   AdminNegociosOrdersDetailPage,
   loader as adminNegociosOrdersDetailLoader,
+  action as adminNegociosOrdersDetailAction,
 } from "../pages/admin/adminNegociosOrdersDetailPage.jsx";
 import {
   AdminNegociosOrdersPage,
@@ -54,6 +55,7 @@ export const adminRouting = {
         {
           path: "orders/:idPedido",
           loader: adminNegociosOrdersDetailLoader,
+          action: adminNegociosOrdersDetailAction,
           element: <AdminNegociosOrdersDetailPage />,
         },
         {
@@ -63,7 +65,6 @@ export const adminRouting = {
         },
       ],
     },
-
     {
       path: "cadete",
       loader: adminCadetesLoader,

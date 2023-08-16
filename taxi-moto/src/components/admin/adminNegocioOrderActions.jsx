@@ -33,6 +33,15 @@ export const AdminNegocioOrderActions = ({ order }) => {
         />
       ) : (
         <div className="flex flex-1 flex-col justify-between gap-1">
+          {!order.state.TOMADO && (
+            <button
+              value="TOMADO"
+              className="btn btn-primary w-full"
+              onClick={onClick}
+            >
+              Pedido tomado
+            </button>
+          )}
           {!order.state.RETIRADO && (
             <button
               value="RETIRADO"
