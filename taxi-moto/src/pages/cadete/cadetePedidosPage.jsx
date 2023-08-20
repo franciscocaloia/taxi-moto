@@ -7,6 +7,7 @@ import { isCompletedOrder } from "../../utils/validation";
 export const CadetePedidosPage = () => {
   const orders = useLoaderData();
   const today = new Date();
+
   let [searchParams, setSearchParams] = useSearchParams();
   useEffect(() => {
     setSearchParams({
@@ -16,7 +17,6 @@ export const CadetePedidosPage = () => {
           year: "numeric",
           month: "2-digit",
           day: "2-digit",
-          localeMatcher: "lookup",
         })
         .split("/")
         .reverse()
@@ -93,7 +93,8 @@ export const CadetePedidosPage = () => {
 export async function loader({ params, request }) {
   const url = new URL(request.url);
   const date = url.searchParams.get("date");
-  const initDate = Date.parse(date) - 21600000;
+  console.log(date);
+  const initDate = Date.parse(date + " GMT-0300") - 21600000;
   const finalDate = initDate + 172800000;
   return fetchData(
     `/orders/cadete/${params.idCadete}?initDate=${initDate}&finalDate=${finalDate}`
