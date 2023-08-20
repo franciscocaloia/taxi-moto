@@ -26,8 +26,8 @@ export async function getOrdersByIdCadete(idCadete, initDate, finalDate) {
   const query = {
     $and: [
       { "cadete._id": idCadete },
-      { orderDate: { $gt: initDate } },
-      { orderDate: { $lt: finalDate } },
+      //{ orderDate: { $gt: initDate } },
+      //{ orderDate: { $lt: finalDate } },
     ],
   };
 
