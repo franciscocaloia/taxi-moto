@@ -92,10 +92,9 @@ export const CadetePedidosPage = () => {
 
 export async function loader({ params, request }) {
   const url = new URL(request.url);
-  const date = url.searchParams.get("date");
-  console.log(date);
-  const initDate = Date.parse(date + " GMT-0300") - 21600000;
-  const finalDate = initDate + 172800000;
+  const date = Date.parse(url.searchParams.get("date") + " GMT-0300");
+  const initDate = date - 21600000;
+  const finalDate = initDate + 108000000;
   return fetchData(
     `/orders/cadete/${params.idCadete}?initDate=${initDate}&finalDate=${finalDate}`
   );
