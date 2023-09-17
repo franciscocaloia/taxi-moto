@@ -22,7 +22,11 @@ export class MongoContainer {
   }
 
   async getManyByFilter(filter, sort = {}) {
-    const array = await this.collection.find(filter).sort(sort).toArray();
+    const array = await this.collection
+      .find(filter)
+      .sort(sort)
+      .limit(100)
+      .toArray();
     return array.map((element) => ({
       ...element,
       _id: element._id.toString(),
