@@ -25,7 +25,6 @@ export class MongoContainer {
     const array = await this.collection
       .find(filter)
       .sort(sort)
-      .limit(100)
       .toArray();
     return array.map((element) => ({
       ...element,
