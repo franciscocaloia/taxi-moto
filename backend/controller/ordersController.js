@@ -92,11 +92,6 @@ export async function putOrder(idOrder, update) {
   const order = await getOrdersById(idOrder);
   if (order.state.ENTREGADO)
     throw new UnprocessableError("El pedido ya fue entregado");
-  if (order.state.TOMADO && update.totalAmount) {
-    await incUser(order.negocio._id, {
-      debt: update.totalAmount.additional - order.totalAmount.additional,
-    });
-  }
   delete update._id;
   return await ordersContainer.update(idOrder, { $set: update });
 }

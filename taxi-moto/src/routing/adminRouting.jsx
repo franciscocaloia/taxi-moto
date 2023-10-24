@@ -31,6 +31,16 @@ import {
   loader as adminNegociosLoader,
 } from "../pages/admin/adminNegociosPage.jsx";
 import { Layout as AuthLayout } from "../utils/auth.jsx";
+import {
+  AdminEditarCadetePage,
+  loader as adminEditarCadeteLoader,
+  action as adminEditarCadeteAction,
+} from "../pages/admin/adminEditarCadetePage.jsx";
+import {
+  AdminCadeteDetailPage,
+  loader as adminCadeteDetailLoader,
+  action as adminCadeteDetailAction,
+} from "../pages/admin/adminCadeteDetailPage.jsx";
 export const adminRouting = {
   path: "admin",
   loader: adminLayoutLoader,
@@ -77,6 +87,18 @@ export const adminRouting = {
       path: "cadete/new",
       element: <AdminNuevoCadetePage />,
       action: adminNuevoCadeteAction,
+    },
+    {
+      path: "cadete/:idCadete",
+      element: <AdminCadeteDetailPage />,
+      loader: adminCadeteDetailLoader,
+      action: adminCadeteDetailAction,
+    },
+    {
+      path: "cadete/:idCadete/editarCadete",
+      element: <AdminEditarCadetePage />,
+      action: adminEditarCadeteAction,
+      loader: adminEditarCadeteLoader,
     },
   ],
 };

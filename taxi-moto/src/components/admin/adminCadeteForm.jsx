@@ -31,7 +31,7 @@ export const AdminCadetesForm = ({ cadete }) => {
     inputError: passwordError,
     inputChangeHandler: passwordChangeHandler,
     inputBlurHandler: passwordBlurHandler,
-  } = useInput(isValidText, cadete?.password);
+  } = useInput(() => true, cadete?.password);
   const {
     inputValue: phoneValue,
     inputValid: phoneValid,
@@ -41,7 +41,7 @@ export const AdminCadetesForm = ({ cadete }) => {
   } = useInput(isValidText, cadete?.phone); //telefono
   return (
     <Form
-      className="w-full  lg:w-3/5 p-6 mx-auto bg-base-100 my-3"
+      className="w-full lg:w-3/5 p-6 mx-auto bg-base-100 my-3"
       method="post"
     >
       <div className="form-control my-3 lg:m-6">

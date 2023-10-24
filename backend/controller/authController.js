@@ -51,7 +51,13 @@ export async function signupUser(newUser) {
     return jwt.sign(user._id, SECRET);
   }
 }
-
+export async function putUser(idUser, update) {
+  delete update._id;
+  if (update.password.trim() == "") {
+    delete update.password;
+  }
+  return await usersContainer.update(idUser, { $set: update });
+}
 export async function getUsers() {
   return await usersContainer.getAll();
 }
@@ -67,9 +73,8 @@ export async function postUser(user) {
   return await usersContainer.save(user);
 }
 
-export async function putUser(idUser, user) {
-  delete user._id;
-  return await usersContainer.update(idUser, { $set: user });
+export async function deleteUser(idUser) {
+  return await usersContainer.delete(idUser);
 }
 
 export async function incUser(idUser, user) {

@@ -2,7 +2,9 @@ import { Router } from "express";
 import jwt from "jsonwebtoken";
 import { SECRET } from "../cfg/cfg.js";
 import {
+  deleteUser,
   loginUser,
+  putUser,
   signupUser,
   signupUserArray,
 } from "../controller/authController.js";
@@ -36,6 +38,23 @@ authRouter.post("/signin", async (req, res, next) => {
   const newUser = req.body;
   try {
     const token = await signupUser(newUser);
+    return res.json({ token });
+  } catch (error) {
+    next(error);
+  }
+});
+authRouter.put("/signin/:idCadete", async (req, res, next) => {
+  const newUser = req.body;
+  try {
+    const token = await putUser(req.params.idCadete, newUser);
+    return res.json({ token });
+  } catch (error) {
+    next(error);
+  }
+});
+authRouter.delete("/signin/:idCadete", async (req, res, next) => {
+  try {
+    const token = await deleteUser(req.params.idCadete);
     return res.json({ token });
   } catch (error) {
     next(error);
