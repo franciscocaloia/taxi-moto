@@ -21,7 +21,7 @@ export const ordersRouter = Router();
 ordersRouter.get("/prices", (req, res, next) => {
   return res.status(200).json({
     0: {
-      shipment: 320,
+      shipment: 380,
       additional: 40,
     },
     1000: {
