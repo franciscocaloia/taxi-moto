@@ -51,3 +51,7 @@ authRouter.post("/signupArray", async (req, res, next) => {
     next(error);
   }
 });
+authRouter.post("/testNuevoCadete", (req, res, next) => {
+  console.log(req.body);
+  return res.sendStatus(200);
+});
