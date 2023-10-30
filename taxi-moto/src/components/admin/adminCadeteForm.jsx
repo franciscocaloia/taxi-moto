@@ -159,13 +159,8 @@ export const AdminCadetesForm = ({ cadete }) => {
       <div className="form-control my-3 lg:m-6">
         <button
           disabled={
-            !(
-              firstNameValid &&
-              lastNameValid &&
-              phoneValid &&
-              userNameValid &&
-              passwordValid
-            ) || navigation.state === "submitting"
+            !(firstNameValid && lastNameValid && phoneValid && userNameValid) ||
+            navigation.state === "submitting"
           }
           className={"btn btn-primary hover:btn-primary-focus"}
         >
