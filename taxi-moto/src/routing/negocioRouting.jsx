@@ -3,7 +3,10 @@ import {
   loader as editarPedidoLoader,
   action as editarPedidoAction,
 } from "../pages/negocio/negocioEditarPedidoPage";
-import { NegocioInformacionPage } from "../pages/negocio/negocioInformacionPage";
+import {
+  NegocioInformacionPage,
+  action as negocioInformacionAction,
+} from "../pages/negocio/negocioInformacionPage";
 import {
   NegocioNuevoPedidoPage,
   action as nuevoPedidoAction,
@@ -48,6 +51,7 @@ export const negocioRouting = {
     {
       path: ":idNegocio/info",
       element: <NegocioInformacionPage />,
+      action: negocioInformacionAction,
     },
     {
       path: ":idNegocio/pedidos",

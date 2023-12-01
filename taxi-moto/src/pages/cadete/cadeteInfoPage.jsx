@@ -32,6 +32,6 @@ export function action({ params }) {
         earnings: 0,
       }),
     },
-    `${params.idCadete}/info`
+    `/cadete/${params.idCadete}/info`
   );
 }

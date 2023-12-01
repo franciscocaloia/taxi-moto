@@ -53,7 +53,7 @@ export async function signupUser(newUser) {
 }
 export async function putUser(idUser, update) {
   delete update._id;
-  if (update.password.trim() == "") {
+  if (update.password?.trim() == "") {
     delete update.password;
   }
   return await usersContainer.update(idUser, { $set: update });
