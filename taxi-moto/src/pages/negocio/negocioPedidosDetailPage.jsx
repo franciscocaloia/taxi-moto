@@ -8,7 +8,6 @@ export const NegocioPedidosDetailPage = () => {
   const order = useLoaderData();
   const error = useActionData();
   useEffect(() => {
-    console.log(error);
     if (error) {
       toast.error("Error: " + error.data?.message);
     }

@@ -12,7 +12,6 @@ export class MongoContainer {
     }));
   }
   async getById(id) {
-    console.log(id);
     const object = await this.collection.findOne({ _id: new ObjectId(id) });
     return object && { ...object, _id: object._id.toString() };
   }
@@ -22,10 +21,7 @@ export class MongoContainer {
   }
 
   async getManyByFilter(filter, sort = {}) {
-    const array = await this.collection
-      .find(filter)
-      .sort(sort)
-      .toArray();
+    const array = await this.collection.find(filter).sort(sort).toArray();
     return array.map((element) => ({
       ...element,
       _id: element._id.toString(),
@@ -65,7 +61,6 @@ export class MongoContainer {
         },
       ])
       .toArray();
-    console.log(result[0].totalQuantity);
     return result[0].totalQuantity;
   }
   async count(filter) {

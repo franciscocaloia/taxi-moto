@@ -6,7 +6,6 @@ import "react-toastify/dist/ReactToastify.css";
 export const LoginPage = () => {
   const actionData = useActionData();
   useEffect(() => {
-    console.log(actionData);
     if (actionData) {
       toast.error("Error: " + actionData.data?.message);
     }
