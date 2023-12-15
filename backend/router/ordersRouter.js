@@ -28,6 +28,10 @@ ordersRouter.get("/prices", (req, res, next) => {
       shipment: 50,
       additional: 0,
     },
+    1500: {
+      shipment: 50,
+      additional: 0,
+    },
     2000: {
       shipment: 50,
       additional: 0,
