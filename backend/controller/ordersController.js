@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import { isCompletedOrder } from "../../taxi-moto/src/utils/validation.js";
 import { client } from "../cfg/mongodb.js";
 import { MongoContainer } from "../container/mongoContainer.js";
@@ -109,16 +110,20 @@ export async function notificarPedido(idOrder) {
 }
 
 export async function tomarPedido(idOrder, idCadete) {
-  const order = await ordersContainer.getById(idOrder);
-  if (order.cadete) {
+  const cadete = await getUserById(idCadete);
+
+  const result = await ordersContainer.updateWhere(
+    { _id: new ObjectId(idOrder), "state.TOMADO": false },
+    { $set: { cadete, [`state.TOMADO`]: true } }
+  );
+  if (result.modifiedCount === 0) {
     throw new UnprocessableError("El pedido ya tiene un cadete asignado");
   }
-  const cadete = await getUserById(idCadete);
+  const order = await ordersContainer.getById(idOrder);
   await incUser(order.negocio._id, {
     debt: order.totalAmount.additional,
   });
-  await ordersContainer.update(idOrder, { $set: { cadete } });
-  return await setState(idOrder, "TOMADO");
+  return result;
 }
 
 export async function retirarPedido(idOrder) {
