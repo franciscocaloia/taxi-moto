@@ -1,6 +1,7 @@
 import { Router } from "express";
 import jwt from "jsonwebtoken";
 import { SECRET } from "../cfg/cfg.js";
+import multer from "multer";
 import {
   deleteUser,
   loginUser,
@@ -8,7 +9,11 @@ import {
   signupUser,
   signupUserArray,
 } from "../controller/authController.js";
+import path from "path";
+
+const __dirname = path.dirname("");
 export const authRouter = Router();
+const upload = multer({ dest: "images" });
 
 export function authMiddleware(req, res, next) {
   if (!req.headers.authorization) {
@@ -34,8 +39,9 @@ authRouter.post("/login", async (req, res, next) => {
   }
 });
 
-authRouter.post("/signin", async (req, res, next) => {
-  const newUser = req.body;
+authRouter.post("/signin", upload.single("image"), async (req, res, next) => {
+  const newUser = { ...req.body, image: req.file.path };
+  console.log(newUser);
   try {
     const token = await signupUser(newUser);
     return res.json({ token });
@@ -72,4 +78,10 @@ authRouter.post("/signupArray", async (req, res, next) => {
 });
 authRouter.post("/testNuevoCadete", (req, res, next) => {
   return res.sendStatus(200);
+});
+
+authRouter.get("/images/:idImage", (req, res, next) => {
+  return res.sendFile(`images/${req.params.idImage}`, {
+    root: __dirname,
+  });
 });
