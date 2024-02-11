@@ -12,6 +12,7 @@ export class MongoContainer {
     }));
   }
   async getById(id) {
+    console.log(id);
     const object = await this.collection.findOne({ _id: new ObjectId(id) });
     return object && { ...object, _id: object._id.toString() };
   }
@@ -50,6 +51,11 @@ export class MongoContainer {
     return result;
   }
 
+  async updateWhere(where, object) {
+    const result = await this.collection.updateOne(where, object);
+    return result;
+  }
+
   async aggregate(match, group) {
     const result = await this.collection
       .aggregate([
@@ -61,6 +67,7 @@ export class MongoContainer {
         },
       ])
       .toArray();
+    console.log(result[0].totalQuantity);
     return result[0].totalQuantity;
   }
   async count(filter) {
