@@ -14,16 +14,20 @@ import logoSearch from "../../assets/logoSearch.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { mapInputActions } from "../../store/mapInputSlice";
 import { toast } from "react-toastify";
+import { getPricing } from "../../utils/pricing";
 
 const loader = new Loader({
   apiKey: import.meta.env.VITE_GOOGLE_API_KEY,
 });
 
 export const PedidoForm = ({ order }) => {
+  const [pricing,setPricing] = useState({
+  })
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const navigation = useNavigation();
   const state = useSelector((state) => state);
+  const {mapInput:{route}} = state
   const error = useActionData();
   useEffect(() => {
     if (order) {
@@ -35,6 +39,13 @@ export const PedidoForm = ({ order }) => {
       toast.error("Error: " + error.data.message);
     }
   }, [error]);
+
+  useEffect( ()=>{
+    async function getPricingOnRouteChange(){
+      setPricing(await getPricing(route.totalDistance));
+    }
+    getPricingOnRouteChange()
+  },[route])
 
   const [directionResults, setDirectionResults] = useState();
   const {
@@ -172,6 +183,7 @@ export const PedidoForm = ({ order }) => {
               amountError && "input-error"
             }`}
           />
+          {amountValue && <span>Con envío: {parseFloat(amountValue) + pricing.shipment + pricing.additional}</span>}
           {amountError && (
             <div className="relative">
               <p className="absolute text-error">Ingrese un monto válido</p>

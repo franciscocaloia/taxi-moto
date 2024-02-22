@@ -12,9 +12,12 @@ export const CadeteCard = ({ cadete }) => {
           </span>
         </div>
       </div>
-      <h3 className="text-2xl">
-        {cadete ? `${cadete?.firstname} ${cadete?.lastname}` : "No asignado"}
-      </h3>
+      <div>
+        <h3 className="text-2xl">
+          {cadete ? `${cadete?.firstname} ${cadete?.lastname}` : "No asignado"}
+        </h3>
+        <span>Telefono: {cadete.phone}</span>
+      </div>
     </div>
   );
 };
