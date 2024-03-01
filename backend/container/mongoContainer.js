@@ -21,8 +21,8 @@ export class MongoContainer {
     return object && { ...object, _id: object._id.toString() };
   }
 
-  async getManyByFilter(filter, sort = {}) {
-    const array = await this.collection.find(filter).sort(sort).toArray();
+  async getManyByFilter(filter, sort = {},limit=0) {
+    const array = await this.collection.find(filter).sort(sort).limit(limit).toArray();
     return array.map((element) => ({
       ...element,
       _id: element._id.toString(),

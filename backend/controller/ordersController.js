@@ -10,7 +10,7 @@ const ordersContainer = new MongoContainer(ordersCollection);
 
 export async function getOrdersByIdNegocio(idNegocio) {
   const query = { "negocio._id": idNegocio };
-  return await ordersContainer.getManyByFilter(query, { orderDate: 1 });
+  return await ordersContainer.getManyByFilter(query, { orderDate: 1 },50);
 }
 export async function getAvailableOrdersByIdNegocio(idNegocio) {
   const query = {
