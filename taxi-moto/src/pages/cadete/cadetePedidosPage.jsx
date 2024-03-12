@@ -10,7 +10,7 @@ export const CadetePedidosPage = () => {
 
   let [searchParams, setSearchParams] = useSearchParams();
   useEffect(() => {
-    setSearchParams({
+    setSearchParams({ 
       date: today
         .toLocaleDateString("es-AR", {
           timeZone: "America/Argentina/Buenos_Aires",
