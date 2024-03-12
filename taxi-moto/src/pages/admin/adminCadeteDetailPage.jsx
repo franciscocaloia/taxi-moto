@@ -13,7 +13,6 @@ export function loader({ params }) {
 }
 
 export function action({ params }) {
-  console.log("hola");
   return submitData(
     `/signin/${params.idCadete}`,
     { method: "delete" },

@@ -101,14 +101,11 @@ app.io = io;
 io.on("connection", (socket) => {
   socket.on("cadeteConnection", async (idCadete) => {
     const orders = await getOrdersByIdCadete(idCadete);
-    orders.forEach((order) => {
-      if (!isCompletedOrder(order)) {
-        if (!order.canceled) {
-          socket.join(order._id);
-        } else if (!order.notified) {
+    orders.pending.forEach((order) => {
+        socket.join(order._id);
+        if (!order.notified) {
           socket.emit("orderCanceled", order);
         }
-      }
     });
   });
   socket.on("orderCanceledNotified", async (id) => {
