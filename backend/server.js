@@ -103,9 +103,11 @@ io.on("connection", (socket) => {
     const orders = await getOrdersByIdCadete(idCadete);
     orders.pending.forEach((order) => {
         socket.join(order._id);
-        if (!order.notified) {
-          socket.emit("orderCanceled", order);
-        }
+    });
+    orders.canceled.forEach((order) => {
+      if (!order.notified) {
+        socket.emit("orderCanceled", order);
+      }
     });
   });
   socket.on("orderCanceledNotified", async (id) => {
