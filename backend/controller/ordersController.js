@@ -8,9 +8,56 @@ import { getNegocios, getUserById, incUser } from "./authController.js";
 const ordersCollection = client.db("taxi-moto").collection("orders");
 const ordersContainer = new MongoContainer(ordersCollection);
 
-export async function getOrdersByIdNegocio(idNegocio) {
-  const query = { "negocio._id": idNegocio };
-  return await ordersContainer.getManyByFilter(query, { orderDate: 1 });
+export async function getOrdersByIdNegocio(idNegocio,initDate,finalDate) {
+  const pendingOrdersQuery = {
+    $and: [
+      { "negocio._id": idNegocio },
+      { canceled: { $exists: false } },
+      {
+        $or: [
+          { "state.REGISTRADO": false },
+          { "state.TOMADO": false },
+          { "state.RETIRADO": false },
+          { "state.ABONADO": false },
+          { "state.ENTREGADO": false },
+        ],
+      },
+    ],
+  };
+  const completedOrdersQuery = {
+    $and: [
+      { "negocio._id": idNegocio },
+      { canceled: { $exists: false } },
+      {
+        $and: [
+          { "state.REGISTRADO": true },
+          { "state.TOMADO": true },
+          { "state.RETIRADO": true },
+          { "state.ABONADO": true },
+          { "state.ENTREGADO": true },
+        ],
+      },
+      { orderDate: { $gt: initDate } },
+      { orderDate: { $lt: finalDate } }
+    ],
+  };
+  const canceledOrdersQuery = {
+    $and: [{ "negocio._id": idNegocio }, { canceled: { $exists: true } }],
+  };
+  const pendingOrders = await ordersContainer.getManyByFilter(
+    pendingOrdersQuery,
+    { orderDate: -1 }
+  );
+  const completedOrders = await ordersContainer.getManyByFilter(
+    completedOrdersQuery,
+    { orderDate: -1 }
+  );
+  const canceledOrders = await ordersContainer.getManyByFilter(
+    canceledOrdersQuery,
+    { orderDate: -1 }
+  );
+  
+  return { pending: pendingOrders, completed: completedOrders, canceled: canceledOrders };
 }
 export async function getAvailableOrdersByIdNegocio(idNegocio) {
   const query = {
@@ -24,19 +71,54 @@ export async function getAvailableOrdersByIdNegocio(idNegocio) {
 }
 
 export async function getOrdersByIdCadete(idCadete, initDate, finalDate) {
-  const query = {
+  const pendingOrdersQuery = {
     $and: [
       { "cadete._id": idCadete },
-      //{ orderDate: { $gt: initDate } },
-      //{ orderDate: { $lt: finalDate } },
+      { canceled: { $exists: false } },
+      {
+        $or: [
+          { "state.REGISTRADO": false },
+          { "state.TOMADO": false },
+          { "state.RETIRADO": false },
+          { "state.ABONADO": false },
+          { "state.ENTREGADO": false },
+        ],
+      },
     ],
   };
-
-  const asignedOrders = await ordersContainer.getManyByFilter(query, {
-    orderDate: -1,
-  });
-
-  return asignedOrders;
+  const completedOrdersQuery = {
+    $and: [
+      { "cadete._id": idCadete },
+      { canceled: { $exists: false } },
+      {
+        $and: [
+          { "state.REGISTRADO": true },
+          { "state.TOMADO": true },
+          { "state.RETIRADO": true },
+          { "state.ABONADO": true },
+          { "state.ENTREGADO": true },
+        ],
+      },
+      { orderDate: { $gt: initDate } },
+      { orderDate: { $lt: finalDate } }
+    ],
+  };
+  const canceledOrdersQuery = {
+    $and: [{ "cadete._id": idCadete }, { canceled: { $exists: true } }],
+  };
+  const pendingOrders = await ordersContainer.getManyByFilter(
+    pendingOrdersQuery,
+    { orderDate: -1 }
+  );
+  const completedOrders = await ordersContainer.getManyByFilter(
+    completedOrdersQuery,
+    { orderDate: -1 }
+  );
+  const canceledOrders = await ordersContainer.getManyByFilter(
+    canceledOrdersQuery,
+    { orderDate: -1 }
+  );
+  return { pending: pendingOrders, completed: completedOrders, canceled: canceledOrders };
 }
 
 export async function getNegocioDebt(idNegocio, initDate, finalDate) {

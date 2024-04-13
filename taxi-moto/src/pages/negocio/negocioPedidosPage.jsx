@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Link, useLoaderData } from "react-router-dom";
+import { Link, useLoaderData, useSearchParams } from "react-router-dom";
 import { OrdersList } from "../../components/negocio/orders/ordersList";
 import { fetchData } from "../../utils/fetch";
 import { isCompletedOrder } from "../../utils/validation";
@@ -7,57 +7,32 @@ import { isCompletedOrder } from "../../utils/validation";
 export const NegocioPedidosPage = () => {
   const orders = useLoaderData();
   const today = new Date();
-  const [date, setDate] = useState(
-    `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`
-  );
-  function dateChangeHandler(event) {
-    setDate(event.target.value);
-  }
-  const sortedOrders = useMemo(
-    () =>
-      orders.reduce(
-        (acc, curr) => {
-          if (curr.canceled) {
-            acc.canceled.push(curr);
-          } else {
-            if (isCompletedOrder(curr)) {
-              acc.completed.push(curr);
-            } else {
-              acc.pending.push(curr);
-            }
-          }
-          return acc;
-        },
-        {
-          pending: [],
-          completed: [],
-          canceled: [],
-        }
-      ),
-    [orders]
-  );
 
-  const filteredCompletedOrders = useMemo(() => {
-    const filterDate = new Date(date).toLocaleDateString("es-AR", {
-      timeZone: "ART",
+  let [searchParams, setSearchParams] = useSearchParams();
+  useEffect(() => {
+    setSearchParams({
+      date: today
+        .toLocaleDateString("es-AR", {
+          timeZone: "America/Argentina/Buenos_Aires",
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        })
+        .split("/")
+        .reverse()
+        .join("-"),
     });
-    return sortedOrders.completed.filter((order) => {
-      const orderDate = new Date(order.orderDate);
-      orderDate.setHours(orderDate.getHours() - 6);
-      return (
-        orderDate.toLocaleDateString("es-AR", {
-          // timeZone: "ART",
-        }) === filterDate
-      );
-    });
-  }, [date]);
+  }, []);
+  function dateChangeHandler(event) {
+    setSearchParams({ date: event.target.value });
+  }
   return (
     <div className="w-5/6 mx-auto lg:w-4/5">
       <h2 className="card-title capitalize border-b-2 border-b-base-200">
         Pedidos pendientes
       </h2>
-      {sortedOrders.pending.length !== 0 ? (
-        <OrdersList orders={sortedOrders.pending} />
+      {orders.pending.length !== 0 ? (
+        <OrdersList orders={orders.pending} />
       ) : (
         <>
           <div className="card max-w-xs bg-base-100 p-6 m-6 shadow-xl">
@@ -75,12 +50,31 @@ export const NegocioPedidosPage = () => {
       <h2 className="card-title capitalize border-b-2 border-b-base-200">
         Pedidos completados
       </h2>
-      <input type="date" onChange={dateChangeHandler} value={date}></input>
-      <OrdersList orders={filteredCompletedOrders} />
+      <input
+        defaultValue={searchParams.get("date")? searchParams.get("date") : today
+        .toLocaleDateString("es-AR", {
+          timeZone: "America/Argentina/Buenos_Aires",
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        })
+        .split("/")
+        .reverse()
+        .join("-")}
+        type="date"
+        onChange={dateChangeHandler}
+      ></input>
+      <OrdersList orders={orders.completed} />
     </div>
   );
 };
 
-export async function loader({ params }) {
-  return fetchData(`/orders/negocio/${params.idNegocio}`);
+export async function loader({ params, request }) {
+  const url = new URL(request.url);
+  const date = url.searchParams.get("date");
+  const initDate = Date.parse(date + " GMT-0300") 
+  const finalDate = initDate + 86400000;
+  return fetchData(
+    `/orders/negocio/${params.idNegocio}?initDate=${initDate}&finalDate=${finalDate}`
+  );
 }

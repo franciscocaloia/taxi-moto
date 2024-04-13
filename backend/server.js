@@ -20,7 +20,6 @@ import cors from "cors";
 import { isCompletedOrder } from "./util/validation.js";
 const app = express();
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -102,13 +101,12 @@ app.io = io;
 io.on("connection", (socket) => {
   socket.on("cadeteConnection", async (idCadete) => {
     const orders = await getOrdersByIdCadete(idCadete);
-    orders.forEach((order) => {
-      if (!isCompletedOrder(order)) {
-        if (!order.canceled) {
-          socket.join(order._id);
-        } else if (!order.notified) {
-          socket.emit("orderCanceled", order);
-        }
+    orders.pending.forEach((order) => {
+        socket.join(order._id);
+    });
+    orders.canceled.forEach((order) => {
+      if (!order.notified) {
+        socket.emit("orderCanceled", order);
       }
     });
   });
