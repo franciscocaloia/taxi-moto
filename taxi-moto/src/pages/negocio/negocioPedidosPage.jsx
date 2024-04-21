@@ -51,6 +51,7 @@ export const NegocioPedidosPage = () => {
         Pedidos completados
       </h2>
       <input
+        name="date"
         defaultValue={searchParams.get("date")? searchParams.get("date") : today
         .toLocaleDateString("es-AR", {
           timeZone: "America/Argentina/Buenos_Aires",
