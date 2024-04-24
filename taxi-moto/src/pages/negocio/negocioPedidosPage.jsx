@@ -72,11 +72,14 @@ export const NegocioPedidosPage = () => {
 export async function loader({ params, request }) {
   const url = new URL(request.url);
   const date = url.searchParams.get("date");
-  const [year,month,day] = date.split("-");
-  const initDate = Date.UTC(year,month-1,day)+10800000;
-  const finalDate = initDate + 86400000;
-  console.log(Date.UTC(year,month-1,day)+10800000);
-  return fetchData(
-    `/orders/negocio/${params.idNegocio}?initDate=${initDate}&finalDate=${finalDate}`
-  );
+  if (date) {
+    const [year,month,day] = date.split("-");
+    const initDate = Date.UTC(year,month-1,day)+10800000;
+    const finalDate = initDate + 86400000;
+    return fetchData(
+      `/orders/negocio/${params.idNegocio}?initDate=${initDate}&finalDate=${finalDate}`
+    );
+  }else{
+    return fetchData(`/orders/negocio/${params.idNegocio}`);
+  }
 }
