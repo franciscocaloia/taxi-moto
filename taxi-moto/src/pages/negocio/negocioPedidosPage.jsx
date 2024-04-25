@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Link, useLoaderData, useSearchParams } from "react-router-dom";
 import { OrdersList } from "../../components/negocio/orders/ordersList";
 import { fetchData } from "../../utils/fetch";
-import { isCompletedOrder } from "../../utils/validation";
 
 export const NegocioPedidosPage = () => {
   const orders = useLoaderData();
@@ -51,6 +50,7 @@ export const NegocioPedidosPage = () => {
         Pedidos completados
       </h2>
       <input
+        name="date"
         defaultValue={searchParams.get("date")? searchParams.get("date") : today
         .toLocaleDateString("es-AR", {
           timeZone: "America/Argentina/Buenos_Aires",
@@ -72,9 +72,14 @@ export const NegocioPedidosPage = () => {
 export async function loader({ params, request }) {
   const url = new URL(request.url);
   const date = url.searchParams.get("date");
-  const initDate = Date.parse(date + " GMT-0300") 
-  const finalDate = initDate + 86400000;
-  return fetchData(
-    `/orders/negocio/${params.idNegocio}?initDate=${initDate}&finalDate=${finalDate}`
-  );
+  if (date) {
+    const [year,month,day] = date.split("-");
+    const initDate = Date.UTC(year,month-1,day)+10800000;
+    const finalDate = initDate + 86400000;
+    return fetchData(
+      `/orders/negocio/${params.idNegocio}?initDate=${initDate}&finalDate=${finalDate}`
+    );
+  }else{
+    return fetchData(`/orders/negocio/${params.idNegocio}`);
+  }
 }

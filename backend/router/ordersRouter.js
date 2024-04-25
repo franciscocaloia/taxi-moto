@@ -106,6 +106,7 @@ ordersRouter.post("/", async (req, res, next) => {
 
 ordersRouter.get("/negocio/:idNegocio", async (req, res, next) => {
   try {
+    console.log(req.query.initDate, req.query.finalDate)
     const data = await getOrdersByIdNegocio(req.params.idNegocio,
     parseInt(req.query.initDate),
     parseInt(req.query.finalDate));
