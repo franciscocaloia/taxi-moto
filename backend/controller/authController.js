@@ -2,6 +2,7 @@ import { client } from "../cfg/mongodb.js";
 import jwt from "jsonwebtoken";
 import { MongoContainer } from "../container/mongoContainer.js";
 import bcrypt from "bcrypt";
+import { Storage } from "@google-cloud/storage"
 import {
   NotAuthError,
   NotFoundError,
@@ -11,6 +12,12 @@ import { SECRET } from "../cfg/cfg.js";
 
 const usersCollection = client.db("taxi-moto").collection("users");
 const usersContainer = new MongoContainer(usersCollection);
+
+const storage = new Storage({
+  projectId: "taxi-moto",
+  keyFilename: "taximoto-381512-fa8bf1e9afa9.json"
+});
+const bucket = storage.bucket("115352082622851785252");
 
 export async function loginUser(username, password) {
   const user = await usersContainer.getByFilter({ username });
@@ -37,6 +44,12 @@ export async function signupUserArray(array) {
       const hash = bcrypt.hashSync(password, 8);
       await usersContainer.save({ ...newUser, password: hash });
     }
+  });
+}
+
+export async function uploadImage(idUser, image) {
+  return await bucket.upload(image, {
+    destination: `users/${idUser}`,
   });
 }
 

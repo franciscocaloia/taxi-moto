@@ -11,7 +11,7 @@ export const AdminNegocioListItem = ({ negocio }) => {
         <div className="avatar placeholder">
           <div className="bg-neutral-focus text-neutral-content w-16 xl:w-20">
             <img
-              src={`/assets/negocio/${negocio.username}.jpeg`}
+              src={`${import.meta.env.VITE_API_HOST}/${negocio.image}`}
               alt={negocio.username}
             />
           </div>

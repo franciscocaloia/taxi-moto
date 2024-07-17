@@ -8,7 +8,7 @@ export const AdminNegociosPage = () => {
   return (
     <div className="w-5/6 mx-auto lg:w-4/5">
       <div className="card max-w-xs bg-base-100 p-6 m-6 shadow-xl">
-        <Link className="btn btn-primary">Nuevo negocio</Link>
+        <Link to="new" className="btn btn-primary">Nuevo negocio</Link>
       </div>
       <AdminNegociosList negocios={data} />
     </div>

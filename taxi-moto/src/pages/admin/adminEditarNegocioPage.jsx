@@ -4,12 +4,17 @@ import { submitDataWithFiles } from "../../utils/fetch";
 import { json } from "react-router-dom";
 
 export const AdminNuevoNegocioPage = () => {
+  const negocio = useLoaderData();
   return (
     <>
-      <AdminNegocioForm />
+      <AdminNegocioForm negocio={negocio}/>
     </>
   );
 };
+
+export async function loader({ params }) {
+  return fetchData(`/negocio/${params.idNegocio}`);
+}
 
 export async function action({ request, params }) {
   const formData = await request.formData();
@@ -20,7 +25,7 @@ export async function action({ request, params }) {
   }
   return submitDataWithFiles(
     "/signin_negocio",
-    { method: "post", body:formData },
+    { method: "put", body:formData },
     "/admin/negocio"
   );
 }

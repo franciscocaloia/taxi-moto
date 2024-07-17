@@ -39,9 +39,8 @@ authRouter.post("/login", async (req, res, next) => {
   }
 });
 
-authRouter.post("/signin", upload.single("image"), async (req, res, next) => {
-  const newUser = { ...req.body, image: req.file.path };
-  console.log(newUser);
+authRouter.post("/signin_cadete", async (req, res, next) => {
+  const newUser = req.body
   try {
     const token = await signupUser(newUser);
     return res.json({ token });
@@ -49,8 +48,29 @@ authRouter.post("/signin", upload.single("image"), async (req, res, next) => {
     next(error);
   }
 });
-authRouter.put("/signin/:idCadete", async (req, res, next) => {
-  const newUser = req.body;
+authRouter.post("/signin_negocio", upload.single("image"), async (req, res, next) => {
+  const state = JSON.parse(req.body.state)
+  const newUser = {
+    name: req.body.name,
+    username: req.body.username,
+    password: req.body.password,
+    phone: req.body.phone,
+    direction: req.body.direction,
+    location: state.mapInput.mapCoords,
+    type: "negocio",
+    debt:0,
+    image: req.file.path,
+  }
+  try {
+    const token = await signupUser(newUser);
+    return res.json({ token });
+    // return res.sendStatus(200);
+  } catch (error) {
+    next(error);
+  }
+});
+authRouter.put("/signin_cadete/:idCadete",upload.single("image"), async (req, res, next) => {
+  const newUser = {...req.body,...(req.file && { image: req.file.path })}
   try {
     const token = await putUser(req.params.idCadete, newUser);
     return res.json({ token });
@@ -58,9 +78,27 @@ authRouter.put("/signin/:idCadete", async (req, res, next) => {
     next(error);
   }
 });
-authRouter.delete("/signin/:idCadete", async (req, res, next) => {
+authRouter.put("/signin_negocio/:idNegocio",upload.single("image"), async (req, res, next) => {
+  const state = JSON.parse(req.body.state)
+  const newUser = {
+    ...(req.body.name && {name: req.body.name}),
+    ...(req.body.username && {username: req.body.username}),
+    ...(req.body.password && {password: req.body.password}),
+    ...(req.body.phone && {phone: req.body.phone,}),
+    ...(req.body.direction && {direction: req.body.direction,}),
+    ...(state.mapInput.mapCoords && {location: state.mapInput.mapCoords}),
+    ...(req.file.path && {image: req.file.path}),
+  }
   try {
-    const token = await deleteUser(req.params.idCadete);
+    const token = await putUser(req.params.idNegocio, newUser);
+    return res.json({ token });
+  } catch (error) {
+    next(error);
+  }
+});
+authRouter.delete("/signin/:idUser", async (req, res, next) => {
+  try {
+    const token = await deleteUser(req.params.idUser);
     return res.json({ token });
   } catch (error) {
     next(error);
@@ -76,7 +114,8 @@ authRouter.post("/signupArray", async (req, res, next) => {
     next(error);
   }
 });
-authRouter.post("/testNuevoCadete", (req, res, next) => {
+authRouter.post("/testNuevoCadete",upload.single("image"), (req, res, next) => {
+  console.log(req.file)
   return res.sendStatus(200);
 });
 

@@ -41,6 +41,7 @@ import {
   loader as adminCadeteDetailLoader,
   action as adminCadeteDetailAction,
 } from "../pages/admin/adminCadeteDetailPage.jsx";
+import { AdminNuevoNegocioPage,action as adminNuevoNegocioAction } from "../pages/admin/adminNuevoNegocioPage.jsx";
 export const adminRouting = {
   path: "admin",
   loader: adminLayoutLoader,
@@ -50,6 +51,11 @@ export const adminRouting = {
       path: "negocio",
       loader: adminNegociosLoader,
       element: <AdminNegociosPage />,
+    },
+    {
+      path: "negocio/new",
+      element: <AdminNuevoNegocioPage />,
+      action: adminNuevoNegocioAction,
     },
     {
       path: "negocio/:idNegocio",

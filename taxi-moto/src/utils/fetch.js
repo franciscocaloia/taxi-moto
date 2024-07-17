@@ -14,6 +14,25 @@ export async function fetchData(path) {
     return response;
   }
 }
+
+export async function submitDataWithFiles( path, options, redirectUrl) {
+  const token = localStorage.getItem("token");
+  if (token) {
+    const response = await fetch(import.meta.env.VITE_API_HOST + path, {
+      headers: {
+        Authorization: "Bearer " + token,
+        "Contetnt-Type":"multipart/form-data" 
+      },
+      ...options,
+    });
+    if (!response.ok) {
+      throw response;
+    }
+    return redirect(redirectUrl);
+  }
+
+}
+
 export async function submitData(path, options, redirectUrl) {
   const token = localStorage.getItem("token");
   if (token) {

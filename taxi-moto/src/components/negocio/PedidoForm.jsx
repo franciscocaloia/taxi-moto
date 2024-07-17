@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { mapInputActions } from "../../store/mapInputSlice";
 import { toast } from "react-toastify";
 import { getPricing } from "../../utils/pricing";
+import Routing from "../../UI/routing";
 
 const loader = new Loader({
   apiKey: import.meta.env.VITE_GOOGLE_API_KEY,
@@ -27,7 +28,8 @@ export const PedidoForm = ({ order }) => {
   const navigate = useNavigate();
   const navigation = useNavigation();
   const state = useSelector((state) => state);
-  const {mapInput:{route}} = state
+  const { auth: user, mapInput } = state
+  const { route } = mapInput;
   const error = useActionData();
   useEffect(() => {
     if (order) {
@@ -39,6 +41,11 @@ export const PedidoForm = ({ order }) => {
       toast.error("Error: " + error.data.message);
     }
   }, [error]);
+
+  useEffect(() => {
+    console.log(state)
+  }, [state])
+  
 
   useEffect( ()=>{
     async function getPricingOnRouteChange(){
@@ -217,7 +224,7 @@ export const PedidoForm = ({ order }) => {
             error?.map && "border border-error"
           }`}
         >
-          <MapInputForm />
+          <MapInputForm/>
           {error?.map && (
             <smal className="absolute w-full text-base-100 bg-error top-full lg:bottom-0 lg:top-auto left-0 text-center">
               {error.map}
