@@ -89,6 +89,5 @@ export async function getUserByFilter(filter) {
 
 export async function getUserById(id) {
   const user = await usersContainer.getById(id);
-  delete user.password;
   return user;
 }

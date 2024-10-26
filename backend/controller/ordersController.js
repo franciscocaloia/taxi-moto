@@ -193,7 +193,9 @@ export async function notificarPedido(idOrder) {
 
 export async function tomarPedido(idOrder, idCadete) {
   const cadete = await getUserById(idCadete);
-
+  if (!cadete ){
+    throw new UnprocessableError("El cadete no existe");
+  }
   const result = await ordersContainer.updateWhere(
     { _id: new ObjectId(idOrder), "state.TOMADO": false },
     { $set: { cadete, [`state.TOMADO`]: true } }
