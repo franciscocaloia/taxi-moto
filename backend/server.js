@@ -17,6 +17,8 @@ import {
   notificarPedido,
 } from "./controller/ordersController.js";
 import cors from "cors";
+import { isCompletedOrder } from "./util/validation.js";
+import { NotAuthError } from "./util/error.js";
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -102,7 +104,7 @@ io.on("connection", (socket) => {
   socket.on("cadeteConnection", async (idCadete) => {
     const orders = await getOrdersByIdCadete(idCadete);
     orders.pending.forEach((order) => {
-        socket.join(order._id);
+      socket.join(order._id);
     });
     orders.canceled.forEach((order) => {
       if (!order.notified) {

@@ -1,9 +1,10 @@
 import React from "react";
 import useInput from "../../hooks/useInput";
-import { Form } from "react-router-dom";
+import { Form, useNavigation } from "react-router-dom";
 import { isValidText } from "../../utils/validation";
 
 export const AdminCadetesForm = ({ cadete }) => {
+  const navigation = useNavigation();
   const {
     inputValue: firstNameValue,
     inputValid: firstNameValid,
@@ -160,7 +161,7 @@ export const AdminCadetesForm = ({ cadete }) => {
         <button
           disabled={
             !(firstNameValid && lastNameValid && phoneValid && userNameValid) ||
-            navigation.state === "submitting"
+            navigation?.state === "submitting"
           }
           className={"btn btn-primary hover:btn-primary-focus"}
         >
