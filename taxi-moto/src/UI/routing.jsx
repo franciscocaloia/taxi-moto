@@ -10,6 +10,24 @@ import { mapInputActions } from "../store/mapInputSlice";
 import { Icon } from "leaflet";
 import markerIconPng from "leaflet/dist/images/marker-icon.png";
 import markerIconRedPng from "../assets/marker-icon-red.png";
+
+function calcularDistanciaManhattan(punto1, punto2) {
+  const R = 6371000; // Radio de la Tierra en metros
+  const rad = Math.PI / 180; // Conversión a radianes
+  const lat1 = punto1[0];
+  const lng1 = punto1[1];
+  const lat2 = punto2[0];
+  const lng2 = punto2[1];
+
+  const deltaLat = Math.abs(lat2 - lat1) * rad;
+  const deltaLng = Math.abs(lng2 - lng1) * rad;
+
+  const distanciaLat = R * deltaLat;
+  const distanciaLng = R * Math.cos(((lat1 + lat2) / 2) * rad) * deltaLng;
+
+  return distanciaLat + distanciaLng;
+}
+
 export default function Routing() {
   const map = useMap();
   const dispatch = useDispatch();
@@ -24,6 +42,12 @@ export default function Routing() {
   useEffect(() => {
     if (!map) return;
     if (!mapCoords) return;
+    const route = {
+      from: location,
+      to: [mapCoords.lat, mapCoords.lng],
+      totalDistance: calcularDistanciaManhattan(location, mapCoords),
+    };
+    dispatch(mapInputActions.setRoute(route));
     const routingControl = L.Routing.control({
       waypoints: [L.latLng(location), L.latLng(mapCoords)],
       routeWhileDragging: false,
