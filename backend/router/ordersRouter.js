@@ -21,75 +21,75 @@ export const ordersRouter = Router();
 ordersRouter.get("/prices", (req, res, next) => {
   return res.status(200).json({
     0: {
-      shipment: 1250,
+      shipment: 1400,
       additional: 50,
     },
     1000: {
-      shipment: 50,
+      shipment: 0,
       additional: 0,
     },
     1500: {
-      shipment: 50,
+      shipment: 0,
       additional: 0,
     },
     2000: {
-      shipment: 50,
+      shipment: 0,
       additional: 0,
     },
     2500: {
-      shipment: 50,
+      shipment: 0,
       additional: 0,
     },
     3000: {
-      shipment: 50,
+      shipment: 0,
       additional: 0,
     },
     3500: {
-      shipment: 50,
+      shipment: 0,
       additional: 0,
     },
     4000: {
-      shipment: 50,
+      shipment: 400,
       additional: 0,
     },
     4500: {
-      shipment: 50,
+      shipment: 0,
       additional: 0,
     },
     5000: {
-      shipment: 50,
+      shipment: 0,
       additional: 0,
     },
     5500: {
-      shipment: 50,
+      shipment: 0,
       additional: 0,
     },
     6000: {
-      shipment: 50,
+      shipment: 300,
       additional: 0,
     },
     6500: {
-      shipment: 50,
+      shipment: 0,
       additional: 0,
     },
     7000: {
-      shipment: 50,
+      shipment: 0,
       additional: 0,
     },
     7500: {
-      shipment: 50,
+      shipment: 0,
       additional: 0,
     },
     8000: {
-      shipment: 50,
+      shipment: 0,
       additional: 0,
     },
     8500: {
-      shipment: 50,
+      shipment: 0,
       additional: 0,
     },
     9000: {
-      shipment: 50,
+      shipment: 0,
       additional: 0,
     },
   });
