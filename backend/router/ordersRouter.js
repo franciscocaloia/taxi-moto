@@ -41,7 +41,7 @@ ordersRouter.get("/prices", (req, res, next) => {
       additional: 0,
     },
     3000: {
-      shipment: 0,
+      shipment: 200,
       additional: 0,
     },
     3500: {
@@ -49,7 +49,7 @@ ordersRouter.get("/prices", (req, res, next) => {
       additional: 0,
     },
     4000: {
-      shipment: 400,
+      shipment: 200,
       additional: 0,
     },
     4500: {
